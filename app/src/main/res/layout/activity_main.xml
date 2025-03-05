@@ -68,7 +68,7 @@
         android:layout_height="match_parent"/>
 
     <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/bt_change_camera"
+        android:id="@+id/ib_change_camera"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="@id/gl_ver_center1"
@@ -79,7 +79,7 @@
         app:layout_constraintDimensionRatio="1:1"/>
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/bt_take_pic"
+        android:id="@+id/iv_take_pic"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="@id/gl_ver_right1"
