@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.ScaleGestureDetector
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
@@ -32,6 +33,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var imageCapture: ImageCapture
     private lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
+    private lateinit var camera: androidx.camera.core.Camera
+
 
     private val launcher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
         if (permissions.all { it.value }) {
@@ -67,14 +70,34 @@ class MainActivity : AppCompatActivity() {
         outputDirectory = getOutputDirectory()
         cameraExecutor = Executors.newSingleThreadExecutor()
 
-        binding.ibChangeCamera.setOnClickListener {
+        binding.ivTakePic.setOnClickListener {
             takePhoto()
         }
+
+        zoomCamera()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         cameraExecutor.shutdown()
+    }
+
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun zoomCamera() {
+        val listener = object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
+            override fun onScale(detector: ScaleGestureDetector): Boolean {
+                val scale = camera.cameraInfo.zoomState.value!!.zoomRatio * detector.scaleFactor
+                camera.cameraControl.setZoomRatio(scale)
+                return true
+            }
+        }
+        val scaleGestureDetector = ScaleGestureDetector(this, listener)
+
+        binding.pvView.setOnTouchListener { _, motionEvent ->
+            scaleGestureDetector.onTouchEvent(motionEvent)
+            return@setOnTouchListener true
+        }
     }
 
     private fun getOutputDirectory() : File {
@@ -136,7 +159,7 @@ class MainActivity : AppCompatActivity() {
 
             try {
                 cameraProvider.unbindAll()      // Hủy các camera previous
-                cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture)
+                camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture)
             } catch (e: Exception) {
                 Log.d(Constants.TAG, "startCamera failed: ${e.message}")
             }
