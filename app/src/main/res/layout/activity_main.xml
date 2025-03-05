@@ -7,10 +7,87 @@
     android:layout_height="match_parent"
     tools:context=".ui.MainActivity">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_ver_left1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.1"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_ver_left2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.2"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_ver_center1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.4"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_ver_center2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.6"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_ver_right1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.8"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_ver_right2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.9"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_hor_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.9"/>
+
     <FrameLayout
         android:id="@+id/cl_camera_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/black"/>
+
+    <androidx.camera.view.PreviewView
+        android:id="@+id/pv_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/bt_change_camera"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="@id/gl_ver_center1"
+        app:layout_constraintEnd_toEndOf="@id/gl_ver_center2"
+        app:layout_constraintTop_toTopOf="@id/gl_hor_bottom"
+        app:layout_constraintBottom_toBottomOf="@id/gl_hor_bottom"
+        android:background="@drawable/ic_shutter"
+        app:layout_constraintDimensionRatio="1:1"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/bt_take_pic"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="@id/gl_ver_right1"
+        app:layout_constraintEnd_toEndOf="@id/gl_ver_right2"
+        app:layout_constraintTop_toTopOf="@id/gl_hor_bottom"
+        app:layout_constraintBottom_toBottomOf="@id/gl_hor_bottom"
+        android:src="@drawable/ic_change"
+        android:background="@drawable/ic_change_aura"
+        app:layout_constraintDimensionRatio="1:1"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
