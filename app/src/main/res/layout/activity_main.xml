@@ -100,7 +100,25 @@
         app:layout_constraintTop_toTopOf="@id/gl_hor_bottom"
         app:layout_constraintBottom_toBottomOf="parent"
         android:src="@drawable/ic_flash_on"
+        android:padding="8dp"
         android:background="@drawable/ic_change_aura"
         app:layout_constraintDimensionRatio="1:1"/>
+
+    <SeekBar
+        android:id="@+id/sb_zooming"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/gl_ver_left2"
+        app:layout_constraintEnd_toEndOf="@id/gl_ver_right1"
+        app:layout_constraintBottom_toBottomOf="@id/gl_hor_bottom" />
+
+    <TextView
+        android:id="@+id/tv_zoom_level"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/sb_zooming"
+        android:text="1.0x"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,17 +1,17 @@
 package com.allsoft.hieu.customcamera.ui
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.pm.PackageManager
-import android.hardware.camera2.CameraAccessException
-import android.hardware.camera2.CameraManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.ScaleGestureDetector
+import android.widget.SeekBar
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
@@ -19,8 +19,7 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.LifecycleOwner
 import com.allsoft.hieu.customcamera.R
 import com.allsoft.hieu.customcamera.databinding.ActivityMainBinding
 import com.allsoft.hieu.customcamera.utils.Constants
@@ -39,8 +38,6 @@ class MainActivity : AppCompatActivity() {
     private var cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
     private var frontCamState : Boolean = false
     private var flashState: Boolean = false
-    private lateinit var cameraManager : CameraManager
-    private lateinit var cameraId : String
 
 
     private val launcher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
@@ -61,11 +58,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         enableEdgeToEdge()
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
 
         if (allPermissionGranted()) {
             startCamera()
@@ -81,8 +73,7 @@ class MainActivity : AppCompatActivity() {
             takePhoto()
         }
 
-        zoomCamera()
-
+        zoomCameraPinch()
         openFlashLight()
     }
 
@@ -95,48 +86,56 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
+    // TODO: Open Flashlight and change icon
     private fun openFlashLight() {
-        cameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
-        cameraId = cameraManager.cameraIdList[0]
-        val isFlashAvailable = applicationContext.packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)
+        binding.ibFlash.setOnClickListener {
+            flashState = !flashState
+            camera.cameraControl.enableTorch(flashState)
 
-        if (isFlashAvailable) {
-            binding.ibFlash.setOnClickListener {
-                flashState = !flashState
-                try {
-                    cameraManager.setTorchMode(cameraId, flashState)
-                }
-                catch (e : CameraAccessException) {
-                    Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_LONG).show()
-                    Log.d(Constants.TAG_FLASH, "Error" + e.message)
-                }
+            if (flashState) {
+                binding.ibFlash.setImageResource(R.drawable.ic_flash_on)
             }
+            else binding.ibFlash.setImageResource(R.drawable.ic_flash_off)
         }
-        else {
-            Toast.makeText(this, "Flash not available", Toast.LENGTH_SHORT).show()
-        }
-
-//        binding.ibFlash.setOnClickListener {
-//
-//            cameraManager.setTorchMode(cameraId, flashState)
-//            if (!flashState) {
-//                binding.ibFlash.setImageResource(R.drawable.ic_flash_on)
-//                flashState = true
-//            }
-//            else {
-//                binding.ibFlash.setImageResource(R.drawable.ic_flash_off)
-//                flashState = false
-//            }
-//        }
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    private fun zoomCamera() {
+
+    // TODO: Zoom Camera by Seekbar
+    @RequiresApi(Build.VERSION_CODES.O)
+    @SuppressLint("DefaultLocale")
+    private fun zoomCameraSeekbar() {
+        camera.cameraInfo.zoomState.observe(this) { state ->
+            binding.sbZooming.max = (state.maxZoomRatio * 10).toInt()
+            binding.tvZoomLevel.text = String.format("%.1fx", state.zoomRatio)
+            binding.sbZooming.progress = (state.zoomRatio * 10).toInt()
+        }
+
+        binding.sbZooming.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                if (fromUser) {
+                    camera.cameraControl.setZoomRatio(progress / 10f)
+                }
+            }
+
+            override fun onStartTrackingTouch(p0: SeekBar?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onStopTrackingTouch(p0: SeekBar?) {
+                TODO("Not yet implemented")
+            }
+
+        })
+    }
+
+
+        @SuppressLint("ClickableViewAccessibility")
+    private fun zoomCameraPinch() {
         val listener = object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
             override fun onScale(detector: ScaleGestureDetector): Boolean {
-                val scale = camera.cameraInfo.zoomState.value!!.zoomRatio * detector.scaleFactor
-                camera.cameraControl.setZoomRatio(scale)
+                val scale = camera.cameraInfo.zoomState.value?.zoomRatio ?: 1f
+                val delta = detector.scaleFactor
+                camera.cameraControl.setZoomRatio(scale * delta)
                 return true
             }
         }
@@ -194,17 +193,19 @@ class MainActivity : AppCompatActivity() {
     // TODO: Start Camera
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
-
         cameraProviderFuture.addListener({
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
 
+            // Using "also" => To ensure camera preview is modified before assigning to preview xml
             val preview = Preview.Builder().build().also { mPreview ->
                 mPreview.surfaceProvider = binding.pvView.surfaceProvider
             }
 
-            imageCapture = ImageCapture.Builder().build()
+            imageCapture = ImageCapture.Builder().setCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY).build()
 
             setUpCamera(cameraProvider, preview)
+
+            zoomCameraSeekbar()
 
             binding.ibChangeCamera.setOnClickListener {
                 frontCamState = !frontCamState
@@ -222,7 +223,7 @@ class MainActivity : AppCompatActivity() {
 
         try {
             cameraProvider.unbindAll()      // Hủy các camera previous
-            camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture)
+            camera = cameraProvider.bindToLifecycle(this as LifecycleOwner, cameraSelector, preview, imageCapture)
         } catch (e: Exception) {
             Log.d(Constants.TAG, "startCamera failed: ${e.message}")
         }
