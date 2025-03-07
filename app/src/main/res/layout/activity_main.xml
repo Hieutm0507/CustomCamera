@@ -54,18 +54,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.9"/>
-
-    <FrameLayout
-        android:id="@+id/cl_camera_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/black"/>
+        app:layout_constraintGuide_percent="0.8"/>
 
     <androidx.camera.view.PreviewView
         android:id="@+id/pv_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="@id/gl_hor_bottom"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@color/transparent"/>
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/iv_take_pic"
@@ -74,7 +75,7 @@
         app:layout_constraintStart_toStartOf="@id/gl_ver_center1"
         app:layout_constraintEnd_toEndOf="@id/gl_ver_center2"
         app:layout_constraintTop_toTopOf="@id/gl_hor_bottom"
-        app:layout_constraintBottom_toBottomOf="@id/gl_hor_bottom"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:background="@drawable/ic_shutter"
         app:layout_constraintDimensionRatio="1:1"/>
 
@@ -85,7 +86,7 @@
         app:layout_constraintStart_toStartOf="@id/gl_ver_right1"
         app:layout_constraintEnd_toEndOf="@id/gl_ver_right2"
         app:layout_constraintTop_toTopOf="@id/gl_hor_bottom"
-        app:layout_constraintBottom_toBottomOf="@id/gl_hor_bottom"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:src="@drawable/ic_change"
         android:background="@drawable/ic_change_aura"
         app:layout_constraintDimensionRatio="1:1"/>
@@ -97,7 +98,7 @@
         app:layout_constraintStart_toStartOf="@id/gl_ver_left1"
         app:layout_constraintEnd_toEndOf="@id/gl_ver_left2"
         app:layout_constraintTop_toTopOf="@id/gl_hor_bottom"
-        app:layout_constraintBottom_toBottomOf="@id/gl_hor_bottom"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:src="@drawable/ic_flash_on"
         android:background="@drawable/ic_change_aura"
         app:layout_constraintDimensionRatio="1:1"/>

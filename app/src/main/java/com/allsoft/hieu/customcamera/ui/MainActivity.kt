@@ -36,6 +36,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var camera: androidx.camera.core.Camera
+    private var cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+    private var frontCamState : Boolean = false
     private var flashState: Boolean = false
     private lateinit var cameraManager : CameraManager
     private lateinit var cameraId : String
@@ -47,7 +49,7 @@ class MainActivity : AppCompatActivity() {
         }
         else {
             Toast.makeText(this, "Permission not granted", Toast.LENGTH_SHORT).show()
-//            finish()        // Đóng ứng dụng khi quyền ko được cấp
+            finish()        // Đóng ứng dụng khi quyền ko được cấp
         }
     }
 
@@ -146,6 +148,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
+    // TODO: Take picture and save it
     private fun getOutputDirectory() : File {
         val mediaDir = externalMediaDirs.firstOrNull()?.let { mFile ->
             File(mFile, resources.getString(R.string.app_name)).apply {
@@ -159,7 +163,6 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("WeekBasedYear")
     private fun takePhoto() {
-        val imageCapture = imageCapture ?:  return
         val photoFile = File(outputDirectory,
             SimpleDateFormat(Constants.FILE_NAME_FORMAT, Locale.getDefault())
                 .format(System.currentTimeMillis()) + ".jpg")
@@ -201,15 +204,28 @@ class MainActivity : AppCompatActivity() {
 
             imageCapture = ImageCapture.Builder().build()
 
-            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+            setUpCamera(cameraProvider, preview)
 
-            try {
-                cameraProvider.unbindAll()      // Hủy các camera previous
-                camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture)
-            } catch (e: Exception) {
-                Log.d(Constants.TAG, "startCamera failed: ${e.message}")
+            binding.ibChangeCamera.setOnClickListener {
+                frontCamState = !frontCamState
+                setUpCamera(cameraProvider, preview)
             }
         }, ContextCompat.getMainExecutor(this))
+    }
+
+    private fun setUpCamera(cameraProvider: ProcessCameraProvider, preview: Preview) {
+        cameraSelector = if (frontCamState) {
+            CameraSelector.DEFAULT_FRONT_CAMERA
+        } else {
+            CameraSelector.DEFAULT_BACK_CAMERA
+        }
+
+        try {
+            cameraProvider.unbindAll()      // Hủy các camera previous
+            camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture)
+        } catch (e: Exception) {
+            Log.d(Constants.TAG, "startCamera failed: ${e.message}")
+        }
     }
 
 
