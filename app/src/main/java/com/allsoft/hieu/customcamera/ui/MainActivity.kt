@@ -1,7 +1,10 @@
 package com.allsoft.hieu.customcamera.ui
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.pm.PackageManager
+import android.hardware.camera2.CameraAccessException
+import android.hardware.camera2.CameraManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -15,7 +18,6 @@ import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -34,6 +36,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var camera: androidx.camera.core.Camera
+    private var flashState: Boolean = false
+    private lateinit var cameraManager : CameraManager
+    private lateinit var cameraId : String
 
 
     private val launcher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
@@ -42,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         }
         else {
             Toast.makeText(this, "Permission not granted", Toast.LENGTH_SHORT).show()
-            finish()        // Đóng ứng dụng khi quyền ko được cấp
+//            finish()        // Đóng ứng dụng khi quyền ko được cấp
         }
     }
 
@@ -75,13 +80,54 @@ class MainActivity : AppCompatActivity() {
         }
 
         zoomCamera()
+
+        openFlashLight()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         cameraExecutor.shutdown()
+
+        // Đóng cameraProvider
+        ProcessCameraProvider.getInstance(this).get().unbindAll()
     }
 
+
+
+    private fun openFlashLight() {
+        cameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
+        cameraId = cameraManager.cameraIdList[0]
+        val isFlashAvailable = applicationContext.packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)
+
+        if (isFlashAvailable) {
+            binding.ibFlash.setOnClickListener {
+                flashState = !flashState
+                try {
+                    cameraManager.setTorchMode(cameraId, flashState)
+                }
+                catch (e : CameraAccessException) {
+                    Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+                    Log.d(Constants.TAG_FLASH, "Error" + e.message)
+                }
+            }
+        }
+        else {
+            Toast.makeText(this, "Flash not available", Toast.LENGTH_SHORT).show()
+        }
+
+//        binding.ibFlash.setOnClickListener {
+//
+//            cameraManager.setTorchMode(cameraId, flashState)
+//            if (!flashState) {
+//                binding.ibFlash.setImageResource(R.drawable.ic_flash_on)
+//                flashState = true
+//            }
+//            else {
+//                binding.ibFlash.setImageResource(R.drawable.ic_flash_off)
+//                flashState = false
+//            }
+//        }
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     private fun zoomCamera() {
