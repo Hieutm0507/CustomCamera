@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">CustomCamera</string>
+    <string name="display_freezing_image">Display Freezing Image</string>
+    <string name="close_freezing_image">Close Freezing Image</string>
 </resources>

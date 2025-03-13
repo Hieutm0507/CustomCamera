@@ -3,17 +3,19 @@ package com.allsoft.hieu.customcamera.ui
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.MotionEvent
 import android.view.ScaleGestureDetector
+import android.view.View
+import android.widget.FrameLayout
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.FocusMeteringAction
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
@@ -28,6 +30,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -38,6 +41,8 @@ class MainActivity : AppCompatActivity() {
     private var cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
     private var frontCamState : Boolean = false
     private var flashState: Boolean = false
+    private lateinit var cameraProvider: ProcessCameraProvider
+    private var isPaused : Boolean = false
 
 
     private val launcher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
@@ -75,6 +80,11 @@ class MainActivity : AppCompatActivity() {
 
         zoomCameraPinch()
         openFlashLight()
+        changeExposure()
+
+        binding.ibFreezeImg.setOnClickListener {
+            togglePause()
+        }
     }
 
     override fun onDestroy() {
@@ -85,6 +95,36 @@ class MainActivity : AppCompatActivity() {
         ProcessCameraProvider.getInstance(this).get().unbindAll()
     }
 
+    override fun onPause() {
+        super.onPause()
+        cameraProvider.unbindAll()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (allPermissionGranted()) {
+            startCamera()
+        }
+    }
+
+    // TODO: Freeze the image
+    private fun togglePause() {
+        isPaused = !isPaused
+
+        if (isPaused) {
+            binding.pvView.bitmap?.let { bitmap ->
+                binding.ivFreezingImg.setImageBitmap(bitmap)
+                binding.ivFreezingImg.visibility = View.VISIBLE
+            }
+        }
+        else {
+            binding.ivFreezingImg.visibility = View.INVISIBLE
+        }
+
+        binding.ibFreezeImg.setImageResource(
+            if (isPaused) R.drawable.ic_resume
+            else R.drawable.ic_pause)
+    }
 
     // TODO: Open Flashlight and change icon
     private fun openFlashLight() {
@@ -100,12 +140,32 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    // TODO: Change the Camera Exposure
+    private fun changeExposure() {
+        binding.sbBrightness.progress = 50
+
+        binding.sbBrightness.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                if (fromUser) {
+                    val exposure = (progress - 50) / 25.0f
+                    camera.cameraControl.setExposureCompensationIndex(exposure.toInt())
+                }
+            }
+
+            override fun onStartTrackingTouch(p0: SeekBar?) { }
+
+            override fun onStopTrackingTouch(p0: SeekBar?) { }
+        })
+    }
+
+
     // TODO: Zoom Camera by Seekbar
-    @RequiresApi(Build.VERSION_CODES.O)
+//    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("DefaultLocale")
     private fun zoomCameraSeekbar() {
         camera.cameraInfo.zoomState.observe(this) { state ->
             binding.sbZooming.max = (state.maxZoomRatio * 10).toInt()
+            // binding.sbZooming.min = (state.minZoomRatio * 10).toInt()
             binding.tvZoomLevel.text = String.format("%.1fx", state.zoomRatio)
             binding.sbZooming.progress = (state.zoomRatio * 10).toInt()
         }
@@ -118,18 +178,16 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onStartTrackingTouch(p0: SeekBar?) {
-                TODO("Not yet implemented")
             }
 
             override fun onStopTrackingTouch(p0: SeekBar?) {
-                TODO("Not yet implemented")
             }
 
         })
     }
 
 
-        @SuppressLint("ClickableViewAccessibility")
+    @SuppressLint("ClickableViewAccessibility")
     private fun zoomCameraPinch() {
         val listener = object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
             override fun onScale(detector: ScaleGestureDetector): Boolean {
@@ -194,7 +252,7 @@ class MainActivity : AppCompatActivity() {
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
         cameraProviderFuture.addListener({
-            val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
+            cameraProvider = cameraProviderFuture.get()
 
             // Using "also" => To ensure camera preview is modified before assigning to preview xml
             val preview = Preview.Builder().build().also { mPreview ->

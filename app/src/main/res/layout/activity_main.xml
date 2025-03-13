@@ -50,6 +50,13 @@
         app:layout_constraintGuide_percent="0.9"/>
 
     <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_hor_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.1"/>
+
+    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/gl_hor_bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -60,6 +67,13 @@
         android:id="@+id/pv_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
+    <ImageView
+        android:id="@+id/iv_freezing_img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/display_freezing_image"
+        android:visibility="invisible"/>
 
     <View
         android:layout_width="match_parent"
@@ -88,7 +102,19 @@
         app:layout_constraintTop_toTopOf="@id/gl_hor_bottom"
         app:layout_constraintBottom_toBottomOf="parent"
         android:src="@drawable/ic_change"
-        android:background="@drawable/ic_change_aura"
+        android:background="@drawable/ic_aura"
+        app:layout_constraintDimensionRatio="1:1"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ib_freeze_img"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="@id/gl_ver_left1"
+        app:layout_constraintEnd_toEndOf="@id/gl_ver_left2"
+        app:layout_constraintTop_toTopOf="@id/gl_hor_bottom"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:src="@drawable/ic_pause"
+        android:background="@drawable/ic_aura"
         app:layout_constraintDimensionRatio="1:1"/>
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -97,20 +123,19 @@
         android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="@id/gl_ver_left1"
         app:layout_constraintEnd_toEndOf="@id/gl_ver_left2"
-        app:layout_constraintTop_toTopOf="@id/gl_hor_bottom"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/gl_hor_top"
         android:src="@drawable/ic_flash_on"
         android:padding="8dp"
-        android:background="@drawable/ic_change_aura"
+        android:background="@drawable/ic_aura"
         app:layout_constraintDimensionRatio="1:1"/>
 
     <SeekBar
         android:id="@+id/sb_zooming"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/gl_ver_left2"
-        app:layout_constraintEnd_toEndOf="@id/gl_ver_right1"
-        app:layout_constraintBottom_toBottomOf="@id/gl_hor_bottom" />
+        android:layout_width="270dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/gl_hor_bottom"/>
 
     <TextView
         android:id="@+id/tv_zoom_level"
@@ -120,5 +145,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/sb_zooming"
         android:text="1.0x"/>
+
+    <SeekBar
+        android:id="@+id/sb_brightness"
+        android:layout_width="270dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="@id/gl_ver_left2"
+        app:layout_constraintEnd_toEndOf="@id/gl_ver_right1"
+        app:layout_constraintBottom_toBottomOf="@id/gl_hor_bottom"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
