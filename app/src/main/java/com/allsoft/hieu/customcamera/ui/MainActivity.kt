@@ -1,9 +1,17 @@
 package com.allsoft.hieu.customcamera.ui
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.ContentValues
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.os.Handler
+import android.os.Looper
+import android.provider.MediaStore
 import android.util.Log
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
@@ -21,6 +29,8 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.LifecycleOwner
 import com.allsoft.hieu.customcamera.R
 import com.allsoft.hieu.customcamera.databinding.ActivityMainBinding
@@ -31,6 +41,7 @@ import java.util.Locale
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -45,13 +56,40 @@ class MainActivity : AppCompatActivity() {
     private var isPaused : Boolean = false
 
 
+    // TODO: ASK PERMISSIONS using ActivityResultLauncher
     private val launcher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
         if (permissions.all { it.value }) {
             startCamera()
         }
         else {
             Toast.makeText(this, "Permission not granted", Toast.LENGTH_SHORT).show()
-            finish()        // Đóng ứng dụng khi quyền ko được cấp
+            finish()        // Close app when permission is not granted
+        }
+    }
+
+    private fun checkAndRequestPermissions() {
+        val requiredPermissions = mutableListOf(Manifest.permission.CAMERA)
+
+        // Thêm quyền Storage dựa trên phiên bản Android
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+            // Android 9 and previous
+            requiredPermissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        } else if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
+            // Android 11 and 12
+            requiredPermissions.add(Manifest.permission.READ_EXTERNAL_STORAGE)
+        } else {
+            // Android 13 and later
+            requiredPermissions.add(Manifest.permission.READ_MEDIA_IMAGES)
+        }
+
+        val permissionsToRequest = requiredPermissions.filter {
+            ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
+        }
+
+        if (permissionsToRequest.isEmpty()) {
+            startCamera()
+        } else {
+            launcher.launch(permissionsToRequest.toTypedArray())
         }
     }
 
@@ -64,6 +102,8 @@ class MainActivity : AppCompatActivity() {
 
         enableEdgeToEdge()
 
+        checkAndRequestPermissions()
+
         if (allPermissionGranted()) {
             startCamera()
         }
@@ -71,27 +111,37 @@ class MainActivity : AppCompatActivity() {
             launcher.launch(Constants.REQUIRED_PERMISSIONS)
         }
 
-        outputDirectory = getOutputDirectory()
+//        outputDirectory = getOutputDirectory()
         cameraExecutor = Executors.newSingleThreadExecutor()
 
-        binding.ivTakePic.setOnClickListener {
-            takePhoto()
+        binding.ibCamera.setOnClickListener {
+//            takePhoto()
+            takePicture()
         }
 
         zoomCameraPinch()
+
+        binding.ibZoomIn.setOnClickListener {
+            adjustZoom(true)
+        }
+
+        binding.ibZoomOut.setOnClickListener {
+            adjustZoom(false)
+        }
+
         openFlashLight()
         changeExposure()
 
-        binding.ibFreezeImg.setOnClickListener {
-            togglePause()
-        }
+//        binding.ibFreezeImg.setOnClickListener {
+//            togglePause()
+//        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         cameraExecutor.shutdown()
 
-        // Đóng cameraProvider
+        // Close cameraProvider
         ProcessCameraProvider.getInstance(this).get().unbindAll()
     }
 
@@ -108,23 +158,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     // TODO: Freeze the image
-    private fun togglePause() {
-        isPaused = !isPaused
-
-        if (isPaused) {
-            binding.pvView.bitmap?.let { bitmap ->
-                binding.ivFreezingImg.setImageBitmap(bitmap)
-                binding.ivFreezingImg.visibility = View.VISIBLE
-            }
-        }
-        else {
-            binding.ivFreezingImg.visibility = View.INVISIBLE
-        }
-
-        binding.ibFreezeImg.setImageResource(
-            if (isPaused) R.drawable.ic_resume
-            else R.drawable.ic_pause)
-    }
+//    private fun togglePause() {
+//        isPaused = !isPaused
+//
+//        if (isPaused) {
+//            binding.pvView.bitmap?.let { bitmap ->
+//                binding.ivFreezingImg.setImageBitmap(bitmap)
+//                binding.ivFreezingImg.visibility = View.VISIBLE
+//            }
+//        }
+//        else {
+//            binding.ivFreezingImg.visibility = View.INVISIBLE
+//        }
+//
+//        binding.ibFreezeImg.setImageResource(
+//            if (isPaused) R.drawable.ic_resume
+//            else R.drawable.ic_pause)
+//    }
 
     // TODO: Open Flashlight and change icon
     private fun openFlashLight() {
@@ -132,10 +182,20 @@ class MainActivity : AppCompatActivity() {
             flashState = !flashState
             camera.cameraControl.enableTorch(flashState)
 
+            val background = ContextCompat.getDrawable(this, R.drawable.bg_buttons)
+            val iconColor = ContextCompat.getDrawable(this, R.drawable.ic_flash)
+
             if (flashState) {
-                binding.ibFlash.setImageResource(R.drawable.ic_flash_on)
+                background?.setTint(Color.parseColor("#129CFF"))
+                iconColor?.setTint(Color.parseColor("#FFFFFF"))
             }
-            else binding.ibFlash.setImageResource(R.drawable.ic_flash_off)
+            else {
+                background?.setTint(Color.parseColor("#FFFFFF"))
+                iconColor?.setTint(Color.parseColor("#000000"))
+            }
+
+            binding.ibFlash.background = background
+            binding.ibFlash.setImageDrawable(iconColor)
         }
     }
 
@@ -164,29 +224,29 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("DefaultLocale")
     private fun zoomCameraSeekbar() {
         camera.cameraInfo.zoomState.observe(this) { state ->
-            binding.sbZooming.max = (state.maxZoomRatio * 10).toInt()
+//            binding.sbZooming.max = (state.maxZoomRatio * 10).toInt()
             // binding.sbZooming.min = (state.minZoomRatio * 10).toInt()
-            binding.tvZoomLevel.text = String.format("%.1fx", state.zoomRatio)
-            binding.sbZooming.progress = (state.zoomRatio * 10).toInt()
+//            binding.tvZoomLevel.text = String.format("%.1fx", state.zoomRatio)
+//            binding.sbZooming.progress = (state.zoomRatio * 10).toInt()
         }
 
-        binding.sbZooming.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                if (fromUser) {
-                    camera.cameraControl.setZoomRatio(progress / 10f)
-                }
-            }
-
-            override fun onStartTrackingTouch(p0: SeekBar?) {
-            }
-
-            override fun onStopTrackingTouch(p0: SeekBar?) {
-            }
-
-        })
+//        binding.sbZooming.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+//            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+//                if (fromUser) {
+//                    camera.cameraControl.setZoomRatio(progress / 10f)
+//                }
+//            }
+//
+//            override fun onStartTrackingTouch(p0: SeekBar?) {
+//            }
+//
+//            override fun onStopTrackingTouch(p0: SeekBar?) {
+//            }
+//        })
     }
 
 
+    // TODO: Zooming Camera
     @SuppressLint("ClickableViewAccessibility")
     private fun zoomCameraPinch() {
         val listener = object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
@@ -205,8 +265,100 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun adjustZoom (isZoomIn : Boolean) {
+        val cameraInfo = camera.cameraInfo
+        val currentZoomRatio = cameraInfo.zoomState.value?.zoomRatio ?: 1f
+
+        val newZoomRatio =
+            if (isZoomIn) {
+                currentZoomRatio + 1f
+            }
+            else {
+                currentZoomRatio - 1f
+            }
+
+        camera.cameraControl.setZoomRatio(newZoomRatio)
+    }
+
+    @SuppressLint("DefaultLocale")
+    private fun observeZoom() {
+        if (!::camera.isInitialized) return     //Do nothing when camera is not initialized
+
+        camera.cameraInfo.zoomState.observe(this) { zoomState ->
+            val zoomRatio = zoomState.zoomRatio
+
+            // Update TextView with the zoom ratio
+            binding.tvZoomRatio.text = String.format(Locale.US, "%.1fx", zoomRatio)
+
+            // Make the TextView visible
+            binding.tvZoomRatio.visibility = View.VISIBLE
+
+            // Hide the TextView after 2 seconds
+            Handler(Looper.getMainLooper()).postDelayed({
+                binding.tvZoomRatio.visibility = View.GONE
+            }, 3000)
+        }
+    }
+
+
 
     // TODO: Take picture and save it
+    /* Method: If Android 10 and later: Using MediaStore API
+     *         If Android 9 or earlier: Using Access API
+     */
+
+    @SuppressLint("WeekBasedYear")
+    private fun takePicture() {
+        val imageCapture = imageCapture ?: return
+        val fileName = SimpleDateFormat(Constants.FILE_NAME_FORMAT, Locale.getDefault())
+            .format(System.currentTimeMillis()) + ".jpg"
+
+        val contentValues = ContentValues().apply {
+            put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
+            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                put(MediaStore.MediaColumns.RELATIVE_PATH, "Pictures/Magnifier")
+            }
+        }
+
+        val outputOptions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val contentResolver = applicationContext.contentResolver
+            val uri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+
+            if (uri == null) {
+                Log.e(Constants.TAG, "Failed to create new MediaStore record.")
+                return
+            }
+            ImageCapture.OutputFileOptions.Builder(contentResolver, uri, contentValues).build()
+        } else {
+            val directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+            val subDir = File(directory, "Magnifier")
+            if (!subDir.exists()) {
+                subDir.mkdirs()
+            }
+            val file = File(subDir, fileName)
+            ImageCapture.OutputFileOptions.Builder(file).build()
+        }
+
+        imageCapture.takePicture(
+            outputOptions,
+            ContextCompat.getMainExecutor(this),
+            object : ImageCapture.OnImageSavedCallback {
+                override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                    val savedUri = outputFileResults.savedUri
+                    val msg = "Photo Saved"
+                    Toast.makeText(this@MainActivity, "$msg $savedUri", Toast.LENGTH_LONG).show()
+                }
+
+                override fun onError(exception: ImageCaptureException) {
+                    Log.e(Constants.TAG, "onError: ${exception.message}", exception)
+                }
+            }
+        )
+    }
+
+
+
     private fun getOutputDirectory() : File {
         val mediaDir = externalMediaDirs.firstOrNull()?.let { mFile ->
             File(mFile, resources.getString(R.string.app_name)).apply {
@@ -264,11 +416,7 @@ class MainActivity : AppCompatActivity() {
             setUpCamera(cameraProvider, preview)
 
             zoomCameraSeekbar()
-
-            binding.ibChangeCamera.setOnClickListener {
-                frontCamState = !frontCamState
-                setUpCamera(cameraProvider, preview)
-            }
+            observeZoom()
         }, ContextCompat.getMainExecutor(this))
     }
 
