@@ -31,6 +31,7 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.LifecycleOwner
 import com.allsoft.hieu.customcamera.R
 import com.allsoft.hieu.customcamera.databinding.ActivityMainBinding
@@ -50,7 +51,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var camera: androidx.camera.core.Camera
     private var cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-    private var frontCamState : Boolean = false
     private var flashState: Boolean = false
     private lateinit var cameraProvider: ProcessCameraProvider
     private var isPaused : Boolean = false
@@ -131,6 +131,13 @@ class MainActivity : AppCompatActivity() {
 
         openFlashLight()
         changeExposure()
+
+        binding.ibSetting.setOnClickListener {
+            val ft : FragmentTransaction = supportFragmentManager.beginTransaction()
+            ft.replace(R.id.fl_display_fragment, SettingFragment())
+            ft.addToBackStack(null)
+            ft.commit()
+        }
 
 //        binding.ibFreezeImg.setOnClickListener {
 //            togglePause()
@@ -219,33 +226,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    // TODO: Zoom Camera by Seekbar
-//    @RequiresApi(Build.VERSION_CODES.O)
-    @SuppressLint("DefaultLocale")
-    private fun zoomCameraSeekbar() {
-        camera.cameraInfo.zoomState.observe(this) { state ->
-//            binding.sbZooming.max = (state.maxZoomRatio * 10).toInt()
-            // binding.sbZooming.min = (state.minZoomRatio * 10).toInt()
-//            binding.tvZoomLevel.text = String.format("%.1fx", state.zoomRatio)
-//            binding.sbZooming.progress = (state.zoomRatio * 10).toInt()
-        }
-
-//        binding.sbZooming.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-//            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-//                if (fromUser) {
-//                    camera.cameraControl.setZoomRatio(progress / 10f)
-//                }
-//            }
-//
-//            override fun onStartTrackingTouch(p0: SeekBar?) {
-//            }
-//
-//            override fun onStopTrackingTouch(p0: SeekBar?) {
-//            }
-//        })
-    }
-
-
     // TODO: Zooming Camera
     @SuppressLint("ClickableViewAccessibility")
     private fun zoomCameraPinch() {
@@ -287,20 +267,39 @@ class MainActivity : AppCompatActivity() {
         camera.cameraInfo.zoomState.observe(this) { zoomState ->
             val zoomRatio = zoomState.zoomRatio
 
-            // Update TextView with the zoom ratio
+            // 1. Displaying TextView Zoom Ratio
             binding.tvZoomRatio.text = String.format(Locale.US, "%.1fx", zoomRatio)
 
-            // Make the TextView visible
             binding.tvZoomRatio.visibility = View.VISIBLE
 
-            // Hide the TextView after 2 seconds
+            // Hide the TextView after 23
             Handler(Looper.getMainLooper()).postDelayed({
                 binding.tvZoomRatio.visibility = View.GONE
             }, 3000)
+
+
+            // 2. Change color of buttons' icon
+            val iconZIColor = ContextCompat.getDrawable(this, R.drawable.ic_plus)
+            val iconZOColor = ContextCompat.getDrawable(this, R.drawable.ic_minus)
+
+            when (zoomRatio) {
+                camera.cameraInfo.zoomState.value?.maxZoomRatio -> {
+                    iconZIColor?.setTint(Color.parseColor("#979797"))
+                }
+                1.0f -> {
+                    iconZOColor?.setTint(Color.parseColor("#979797"))
+                }
+                else -> {
+                    iconZIColor?.setTint(Color.parseColor("#000000"))
+                    iconZOColor?.setTint(Color.parseColor("#000000"))
+                }
+            }
+
+            binding.ibZoomIn.setImageDrawable(iconZIColor)
+            binding.ibZoomOut.setImageDrawable(iconZOColor)
         }
     }
-
-
+    
 
     // TODO: Take picture and save it
     /* Method: If Android 10 and later: Using MediaStore API
@@ -309,7 +308,7 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("WeekBasedYear")
     private fun takePicture() {
-        val imageCapture = imageCapture ?: return
+        val imageCapture = imageCapture
         val fileName = SimpleDateFormat(Constants.FILE_NAME_FORMAT, Locale.getDefault())
             .format(System.currentTimeMillis()) + ".jpg"
 
@@ -415,21 +414,17 @@ class MainActivity : AppCompatActivity() {
 
             setUpCamera(cameraProvider, preview)
 
-            zoomCameraSeekbar()
             observeZoom()
         }, ContextCompat.getMainExecutor(this))
     }
 
     private fun setUpCamera(cameraProvider: ProcessCameraProvider, preview: Preview) {
-        cameraSelector = if (frontCamState) {
-            CameraSelector.DEFAULT_FRONT_CAMERA
-        } else {
-            CameraSelector.DEFAULT_BACK_CAMERA
-        }
+        cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
         try {
             cameraProvider.unbindAll()      // Hủy các camera previous
             camera = cameraProvider.bindToLifecycle(this as LifecycleOwner, cameraSelector, preview, imageCapture)
+            camera.cameraControl.setZoomRatio(3.0f)     // Set initial zoom ratio
         } catch (e: Exception) {
             Log.d(Constants.TAG, "startCamera failed: ${e.message}")
         }
