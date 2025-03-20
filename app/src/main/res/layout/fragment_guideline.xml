@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="@color/transparent"
+    tools:context=".ui.GuidelineFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/ib_flash"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/ic_flash"
+            android:background="@drawable/bg_buttons"
+            android:contentDescription="Open Flash"
+            tools:ignore="HardcodedText"/>
+
+        <LinearLayout
+            android:id="@+id/ll_brightness"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@id/ib_flash"
+            app:layout_constraintEnd_toStartOf="@id/ib_setting"
+            app:layout_constraintStart_toEndOf="@id/ib_flash"
+            app:layout_constraintTop_toTopOf="@id/ib_flash"
+            android:orientation="horizontal"
+            android:layout_marginHorizontal="10dp"
+            android:background="@drawable/bg_seekbar"
+            android:visibility="invisible">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_sun_light"
+                android:importantForAccessibility="no"/>
+
+            <SeekBar
+                android:id="@+id/sb_brightness"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="12dp"
+                android:progress="30"
+                android:progressTint="@color/blue"
+                android:secondaryProgressTint="#C4C4CC"
+                android:thumb="@drawable/ic_thumb" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_arrow_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/ib_flash"
+            app:layout_constraintStart_toEndOf="@id/ib_flash"
+            app:layout_constraintEnd_toEndOf="@id/ib_flash"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/ic_arrow"
+            android:importantForAccessibility="no"/>
+
+        <ImageView
+            android:id="@+id/iv_arrow_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/ll_brightness"
+            app:layout_constraintStart_toStartOf="@id/ll_brightness"
+            app:layout_constraintEnd_toEndOf="@id/ll_brightness"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/ic_arrow"
+            android:importantForAccessibility="no"
+            android:visibility="invisible"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_instruct"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="2:1"
+            app:layout_constraintTop_toBottomOf="@id/iv_arrow_1"
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="20dp"
+            android:background="@drawable/bg_instruct">
+
+            <TextView
+                android:id="@+id/tv_step"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/tv_instruction"
+                android:text="1/5"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="24sp"
+                tools:ignore="HardcodedText"/>
+
+            <TextView
+                android:id="@+id/tv_instruction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_step"
+                app:layout_constraintBottom_toTopOf="@id/bt_next"
+                android:text="@string/instruct_1"
+                android:textColor="#4A4A4A"
+                android:textSize="18sp"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/bt_next"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_instruction"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:padding="15dp"
+                android:background="@drawable/bg_seekbar"
+                android:backgroundTint="#129CFF"
+                android:text="@string/next"
+                android:textSize="20sp"
+                android:textAllCaps="false"
+                android:textColor="@color/white"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/ib_setting"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/ib_flash"
+            app:layout_constraintBottom_toBottomOf="@id/ib_flash"
+            android:layout_marginEnd="20dp"
+            android:src="@drawable/ic_setting"
+            android:background="@drawable/bg_buttons"
+            android:contentDescription="Open Settings"
+            tools:ignore="HardcodedText"
+            android:visibility="invisible"/>
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/ib_camera"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/ic_camera"
+            android:background="@drawable/bg_camera"
+            android:contentDescription="@string/turn_on_camera"
+            android:visibility="invisible"/>
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/ib_zoom_out"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/ib_camera"
+            app:layout_constraintTop_toTopOf="@id/ib_camera"
+            app:layout_constraintBottom_toBottomOf="@id/ib_camera"
+            android:src="@drawable/ic_minus"
+            android:background="@drawable/bg_buttons"
+            android:contentDescription="Reduce Brightness"
+            tools:ignore="HardcodedText"
+            android:visibility="invisible"/>
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/ib_zoom_in"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintStart_toEndOf="@id/ib_camera"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/ib_camera"
+            app:layout_constraintBottom_toBottomOf="@id/ib_camera"
+            android:src="@drawable/ic_plus"
+            android:background="@drawable/bg_buttons"
+            android:contentDescription="Increase Brightness"
+            tools:ignore="HardcodedText"
+            android:visibility="invisible"/>
+
+        <ImageView
+            android:id="@+id/iv_arrow_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/ib_zoom_out"
+            app:layout_constraintStart_toStartOf="@id/ib_zoom_out"
+            app:layout_constraintHorizontal_bias="0.5"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/ic_arrow"
+            android:scaleY="-1"
+            android:importantForAccessibility="no"
+            android:visibility="invisible"/>
+
+        <ImageView
+            android:id="@+id/iv_arrow_4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/ib_camera"
+            app:layout_constraintStart_toStartOf="@id/ib_camera"
+            app:layout_constraintStart_toEndOf="@id/ib_camera"
+            app:layout_constraintHorizontal_bias="0.5"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/ic_arrow"
+            android:scaleY="-1"
+            android:importantForAccessibility="no"
+            android:visibility="invisible"/>
+
+        <ImageView
+            android:id="@+id/iv_arrow_5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/ib_zoom_in"
+            app:layout_constraintStart_toStartOf="@id/ib_zoom_in"
+            app:layout_constraintStart_toEndOf="@id/ib_zoom_in"
+            app:layout_constraintHorizontal_bias="0.5"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/ic_arrow"
+            android:scaleX="-1"
+            android:scaleY="-1"
+            android:importantForAccessibility="no"
+            android:visibility="invisible"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

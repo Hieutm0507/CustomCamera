@@ -112,7 +112,7 @@
             android:src="@drawable/ic_plus"
             android:background="@drawable/bg_buttons"
             android:contentDescription="Increase Brightness"
-            tools:ignore="HardcodedText"/>\
+            tools:ignore="HardcodedText"/>
 
         <TextView
             android:id="@+id/tv_zoom_ratio"
@@ -136,4 +136,67 @@
         android:id="@+id/fl_display_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_splash_screen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:id="@+id/iv_app_icon"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@color/black"
+                android:importantForAccessibility="no" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/app_name"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="32sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="20dp"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/loading"
+                android:textColor="@color/black"
+                android:textSize="18sp"/>
+
+            <ProgressBar
+                android:id="@+id/pb_loading"
+                android:layout_width="160dp"
+                android:layout_height="20dp"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:indeterminate="false"
+                android:progressTint="#129CFF"
+                android:progressBackgroundTint="#D0EBFF"/>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

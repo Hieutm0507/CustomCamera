@@ -1,8 +1,10 @@
 package com.allsoft.hieu.customcamera.ui
 
 import android.Manifest
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.ContentValues
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.net.Uri
@@ -39,6 +41,7 @@ import com.allsoft.hieu.customcamera.utils.Constants
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Locale
+import java.util.Objects
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -54,6 +57,8 @@ class MainActivity : AppCompatActivity() {
     private var flashState: Boolean = false
     private lateinit var cameraProvider: ProcessCameraProvider
     private var isPaused : Boolean = false
+    private lateinit var sharedPreferences: SharedPreferences
+    private var isFirstTime : Boolean = true
 
 
     // TODO: ASK PERMISSIONS using ActivityResultLauncher
@@ -99,8 +104,25 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         enableEdgeToEdge()
+
+        // TODO: Splash Screen
+        Handler(Looper.getMainLooper()).postDelayed(
+            {binding.clSplashScreen.visibility = View.GONE},
+            Constants.LOADING_TIME)
+
+        val animator = ObjectAnimator.ofInt(binding.pbLoading, "progress", 0, 100)
+        animator.duration = Constants.LOADING_TIME
+        animator.start()
+        //-------------------------------
+
+        callData()
+
+        if (isFirstTime) {
+            goToInstruction()
+            isFirstTime = false
+            saveData()
+        }
 
         checkAndRequestPermissions()
 
@@ -155,6 +177,7 @@ class MainActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         cameraProvider.unbindAll()
+        saveData()
     }
 
     override fun onResume() {
@@ -162,6 +185,28 @@ class MainActivity : AppCompatActivity() {
         if (allPermissionGranted()) {
             startCamera()
         }
+        callData()
+    }
+
+    private fun saveData() {
+        sharedPreferences = this.getSharedPreferences(Constants.PREFERENCE, MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        Log.d("TAG_P_SAVE", isFirstTime.toString())
+        editor.putBoolean("isFirstTime", isFirstTime)
+        editor.apply()
+    }
+
+    private fun callData() {
+        sharedPreferences = this.getSharedPreferences(Constants.PREFERENCE, MODE_PRIVATE)
+        isFirstTime = sharedPreferences.getBoolean("isFirstTime", true)
+        Log.d("TAG_P_CALL", isFirstTime.toString())
+    }
+
+    private fun goToInstruction() {
+        val ft : FragmentTransaction = supportFragmentManager.beginTransaction()
+        ft.replace(R.id.fl_display_fragment, GuidelineFragment())
+        ft.addToBackStack(null)
+        ft.commit()
     }
 
     // TODO: Freeze the image
@@ -436,4 +481,5 @@ class MainActivity : AppCompatActivity() {
         Constants.REQUIRED_PERMISSIONS.all {
             ContextCompat.checkSelfPermission(baseContext, it) == PackageManager.PERMISSION_GRANTED
         }
+
 }

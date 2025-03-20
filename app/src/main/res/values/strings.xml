@@ -7,4 +7,11 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="setting">Setting</string>
     <string name="privacy_policy">Privacy Policy</string>
+    <string name="loading">Loading...</string>
+    <string name="instruct_1">Tap here to turn on the flashlight</string>
+    <string name="instruct_2">Tap here to adjust the brightness</string>
+    <string name="instruct_3">Tap here to zoom out</string>
+    <string name="instruct_4">Tap here to take a photo</string>
+    <string name="instruct_5">Tap here to zoom in</string>
+    <string name="next">Next</string>
 </resources>
