@@ -16,6 +16,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginVertical="10dp"
         android:fitsSystemWindows="true">
 
         <androidx.appcompat.widget.AppCompatImageButton
@@ -82,7 +83,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:src="@drawable/ic_camera"
+            android:src="@drawable/ic_capture"
             android:background="@drawable/bg_camera"
             android:contentDescription="@string/turn_on_camera"/>
 
@@ -95,6 +96,7 @@
             app:layout_constraintEnd_toStartOf="@id/ib_camera"
             app:layout_constraintTop_toTopOf="@id/ib_camera"
             app:layout_constraintBottom_toBottomOf="@id/ib_camera"
+            android:layout_marginVertical="3dp"
             android:src="@drawable/ic_minus"
             android:background="@drawable/bg_buttons"
             android:contentDescription="Reduce Brightness"
@@ -109,6 +111,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/ib_camera"
             app:layout_constraintBottom_toBottomOf="@id/ib_camera"
+            android:layout_marginVertical="3dp"
             android:src="@drawable/ic_plus"
             android:background="@drawable/bg_buttons"
             android:contentDescription="Increase Brightness"
@@ -199,4 +202,10 @@
                 android:progressBackgroundTint="#D0EBFF"/>
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/iv_capture_img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:importantForAccessibility="no"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -24,6 +24,7 @@
         tools:ignore="UnnecessaryRequiredFeature" />
 
     <application
+        android:name=".koin.MainApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -34,11 +35,10 @@
         android:theme="@style/Theme.CustomCamera"
         tools:targetApi="31">
         <activity
-            android:name=".ui.GalleryActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

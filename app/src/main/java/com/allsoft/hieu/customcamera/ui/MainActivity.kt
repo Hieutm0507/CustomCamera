@@ -3,59 +3,41 @@ package com.allsoft.hieu.customcamera.ui
 import android.Manifest
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
-import android.content.ContentValues
+import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.os.Handler
 import android.os.Looper
-import android.provider.MediaStore
 import android.util.Log
-import android.view.MotionEvent
-import android.view.ScaleGestureDetector
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.FrameLayout
 import android.widget.SeekBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.FocusMeteringAction
-import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageCaptureException
-import androidx.camera.core.Preview
-import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.LifecycleOwner
 import com.allsoft.hieu.customcamera.R
 import com.allsoft.hieu.customcamera.databinding.ActivityMainBinding
 import com.allsoft.hieu.customcamera.utils.Constants
-import java.io.File
-import java.text.SimpleDateFormat
+import com.allsoft.hieu.customcamera.viewmodel.CameraViewModel
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Locale
-import java.util.Objects
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
 
 
 class MainActivity : AppCompatActivity() {
+    private val cameraViewModel : CameraViewModel by viewModel()
     private lateinit var binding: ActivityMainBinding
-    private lateinit var imageCapture: ImageCapture
-    private lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
-    private lateinit var camera: androidx.camera.core.Camera
-    private var cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-    private var flashState: Boolean = false
-    private lateinit var cameraProvider: ProcessCameraProvider
     private var isPaused : Boolean = false
     private lateinit var sharedPreferences: SharedPreferences
     private var isFirstTime : Boolean = true
@@ -64,18 +46,19 @@ class MainActivity : AppCompatActivity() {
     // TODO: ASK PERMISSIONS using ActivityResultLauncher
     private val launcher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
         if (permissions.all { it.value }) {
-            startCamera()
+            cameraViewModel.startCamera(this, binding.pvView, this as LifecycleOwner)
         }
         else {
             Toast.makeText(this, "Permission not granted", Toast.LENGTH_SHORT).show()
-            finish()        // Close app when permission is not granted
         }
     }
 
     private fun checkAndRequestPermissions() {
         val requiredPermissions = mutableListOf(Manifest.permission.CAMERA)
 
-        // Thêm quyền Storage dựa trên phiên bản Android
+        requiredPermissions.add(Manifest.permission.CAMERA)
+
+        // Add permission for Storage based on Android's version
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
             // Android 9 and previous
             requiredPermissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -91,9 +74,7 @@ class MainActivity : AppCompatActivity() {
             ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
         }
 
-        if (permissionsToRequest.isEmpty()) {
-            startCamera()
-        } else {
+        if (permissionsToRequest.isNotEmpty()) {
             launcher.launch(permissionsToRequest.toTypedArray())
         }
     }
@@ -108,7 +89,16 @@ class MainActivity : AppCompatActivity() {
 
         // TODO: Splash Screen
         Handler(Looper.getMainLooper()).postDelayed(
-            {binding.clSplashScreen.visibility = View.GONE},
+            {
+                binding.clSplashScreen.visibility = View.GONE
+
+                if (allPermissionGranted()) {
+                    cameraViewModel.startCamera(this, binding.pvView, this as LifecycleOwner)
+                }
+                else {
+                    displayPermissionDialog()
+                }
+            },
             Constants.LOADING_TIME)
 
         val animator = ObjectAnimator.ofInt(binding.pbLoading, "progress", 0, 100)
@@ -116,39 +106,27 @@ class MainActivity : AppCompatActivity() {
         animator.start()
         //-------------------------------
 
-        callData()
 
+        // TODO: Direct to Instruction Fragment
+        callData()
         if (isFirstTime) {
             goToInstruction()
-            isFirstTime = false
             saveData()
         }
+        //-------------------------------
 
-        checkAndRequestPermissions()
-
-        if (allPermissionGranted()) {
-            startCamera()
-        }
-        else {
-            launcher.launch(Constants.REQUIRED_PERMISSIONS)
-        }
-
-//        outputDirectory = getOutputDirectory()
         cameraExecutor = Executors.newSingleThreadExecutor()
 
-        binding.ibCamera.setOnClickListener {
-//            takePhoto()
-            takePicture()
-        }
+        observeZoom()
 
-        zoomCameraPinch()
+        cameraViewModel.zoomCameraPinch(this, binding.pvView)
 
         binding.ibZoomIn.setOnClickListener {
-            adjustZoom(true)
+            cameraViewModel.adjustZoom(true)
         }
 
         binding.ibZoomOut.setOnClickListener {
-            adjustZoom(false)
+            cameraViewModel.adjustZoom(false)
         }
 
         openFlashLight()
@@ -161,9 +139,9 @@ class MainActivity : AppCompatActivity() {
             ft.commit()
         }
 
-//        binding.ibFreezeImg.setOnClickListener {
-//            togglePause()
-//        }
+        binding.ibCamera.setOnClickListener {
+            togglePause()
+        }
     }
 
     override fun onDestroy() {
@@ -171,19 +149,19 @@ class MainActivity : AppCompatActivity() {
         cameraExecutor.shutdown()
 
         // Close cameraProvider
-        ProcessCameraProvider.getInstance(this).get().unbindAll()
+        cameraViewModel.releaseCamera()
     }
 
     override fun onPause() {
         super.onPause()
-        cameraProvider.unbindAll()
+        cameraViewModel.releaseCamera()
         saveData()
     }
 
     override fun onResume() {
         super.onResume()
         if (allPermissionGranted()) {
-            startCamera()
+            cameraViewModel.startCamera(this, binding.pvView, this as LifecycleOwner)
         }
         callData()
     }
@@ -207,33 +185,44 @@ class MainActivity : AppCompatActivity() {
         ft.replace(R.id.fl_display_fragment, GuidelineFragment())
         ft.addToBackStack(null)
         ft.commit()
+
+        isFirstTime = false
     }
 
     // TODO: Freeze the image
-//    private fun togglePause() {
-//        isPaused = !isPaused
-//
-//        if (isPaused) {
-//            binding.pvView.bitmap?.let { bitmap ->
-//                binding.ivFreezingImg.setImageBitmap(bitmap)
-//                binding.ivFreezingImg.visibility = View.VISIBLE
-//            }
-//        }
-//        else {
-//            binding.ivFreezingImg.visibility = View.INVISIBLE
-//        }
-//
-//        binding.ibFreezeImg.setImageResource(
-//            if (isPaused) R.drawable.ic_resume
-//            else R.drawable.ic_pause)
-//    }
+    private fun togglePause() {
+        isPaused = !isPaused
+
+        if (isPaused) {
+            binding.pvView.bitmap?.let { bitmap ->
+                val saveImg = cameraViewModel.savePicture(bitmap, this)
+
+                if (saveImg) {
+                    showSuccessToast(this)
+                }
+
+                // Display Image
+                val ft : FragmentTransaction = supportFragmentManager.beginTransaction()
+                val fragment = CaptureFragment()
+
+                val bundle = Bundle()
+                bundle.putParcelable("bitmap", bitmap)
+                fragment.arguments = bundle
+                ft.add(R.id.fl_display_fragment, fragment)
+                ft.addToBackStack(null)
+                ft.commit()
+            }
+        }
+    }
+
 
     // TODO: Open Flashlight and change icon
     private fun openFlashLight() {
         binding.ibFlash.setOnClickListener {
-            flashState = !flashState
-            camera.cameraControl.enableTorch(flashState)
+            cameraViewModel.toggleFlash()
+        }
 
+        cameraViewModel.flashState.observe(this) { flashState ->
             val background = ContextCompat.getDrawable(this, R.drawable.bg_buttons)
             val iconColor = ContextCompat.getDrawable(this, R.drawable.ic_flash)
 
@@ -259,8 +248,7 @@ class MainActivity : AppCompatActivity() {
         binding.sbBrightness.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
-                    val exposure = (progress - 50) / 25.0f
-                    camera.cameraControl.setExposureCompensationIndex(exposure.toInt())
+                    cameraViewModel.changeExposure(progress)
                 }
             }
 
@@ -272,44 +260,9 @@ class MainActivity : AppCompatActivity() {
 
 
     // TODO: Zooming Camera
-    @SuppressLint("ClickableViewAccessibility")
-    private fun zoomCameraPinch() {
-        val listener = object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
-            override fun onScale(detector: ScaleGestureDetector): Boolean {
-                val scale = camera.cameraInfo.zoomState.value?.zoomRatio ?: 1f
-                val delta = detector.scaleFactor
-                camera.cameraControl.setZoomRatio(scale * delta)
-                return true
-            }
-        }
-        val scaleGestureDetector = ScaleGestureDetector(this, listener)
-
-        binding.pvView.setOnTouchListener { _, motionEvent ->
-            scaleGestureDetector.onTouchEvent(motionEvent)
-            return@setOnTouchListener true
-        }
-    }
-
-    private fun adjustZoom (isZoomIn : Boolean) {
-        val cameraInfo = camera.cameraInfo
-        val currentZoomRatio = cameraInfo.zoomState.value?.zoomRatio ?: 1f
-
-        val newZoomRatio =
-            if (isZoomIn) {
-                currentZoomRatio + 1f
-            }
-            else {
-                currentZoomRatio - 1f
-            }
-
-        camera.cameraControl.setZoomRatio(newZoomRatio)
-    }
-
     @SuppressLint("DefaultLocale")
     private fun observeZoom() {
-        if (!::camera.isInitialized) return     //Do nothing when camera is not initialized
-
-        camera.cameraInfo.zoomState.observe(this) { zoomState ->
+        cameraViewModel.zoomState.observe(this) { zoomState ->
             val zoomRatio = zoomState.zoomRatio
 
             // 1. Displaying TextView Zoom Ratio
@@ -317,7 +270,7 @@ class MainActivity : AppCompatActivity() {
 
             binding.tvZoomRatio.visibility = View.VISIBLE
 
-            // Hide the TextView after 23
+            // Hide the TextView after 3 seconds
             Handler(Looper.getMainLooper()).postDelayed({
                 binding.tvZoomRatio.visibility = View.GONE
             }, 3000)
@@ -328,7 +281,7 @@ class MainActivity : AppCompatActivity() {
             val iconZOColor = ContextCompat.getDrawable(this, R.drawable.ic_minus)
 
             when (zoomRatio) {
-                camera.cameraInfo.zoomState.value?.maxZoomRatio -> {
+                cameraViewModel.camera.cameraInfo.zoomState.value?.maxZoomRatio -> {
                     iconZIColor?.setTint(Color.parseColor("#979797"))
                 }
                 1.0f -> {
@@ -344,135 +297,41 @@ class MainActivity : AppCompatActivity() {
             binding.ibZoomOut.setImageDrawable(iconZOColor)
         }
     }
-    
 
-    // TODO: Take picture and save it
-    /* Method: If Android 10 and later: Using MediaStore API
-     *         If Android 9 or earlier: Using Access API
-     */
 
-    @SuppressLint("WeekBasedYear")
-    private fun takePicture() {
-        val imageCapture = imageCapture
-        val fileName = SimpleDateFormat(Constants.FILE_NAME_FORMAT, Locale.getDefault())
-            .format(System.currentTimeMillis()) + ".jpg"
+    @Suppress("DEPRECATION")
+    @SuppressLint("InflateParams", "MissingInflatedId", "SetTextI18n")
+    private fun showSuccessToast(context : Context) {
+        val inflater = LayoutInflater.from(context)
+        val layout = inflater.inflate(R.layout.custom_success_toast, null)
 
-        val contentValues = ContentValues().apply {
-            put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
-            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                put(MediaStore.MediaColumns.RELATIVE_PATH, "Pictures/Magnifier")
-            }
-        }
+        val textView = layout.findViewById<TextView>(R.id.tv_success_message)
+        textView.text = "Your image is saved successfully"
 
-        val outputOptions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val contentResolver = applicationContext.contentResolver
-            val uri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
-
-            if (uri == null) {
-                Log.e(Constants.TAG, "Failed to create new MediaStore record.")
-                return
-            }
-            ImageCapture.OutputFileOptions.Builder(contentResolver, uri, contentValues).build()
-        } else {
-            val directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-            val subDir = File(directory, "Magnifier")
-            if (!subDir.exists()) {
-                subDir.mkdirs()
-            }
-            val file = File(subDir, fileName)
-            ImageCapture.OutputFileOptions.Builder(file).build()
-        }
-
-        imageCapture.takePicture(
-            outputOptions,
-            ContextCompat.getMainExecutor(this),
-            object : ImageCapture.OnImageSavedCallback {
-                override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                    val savedUri = outputFileResults.savedUri
-                    val msg = "Photo Saved"
-                    Toast.makeText(this@MainActivity, "$msg $savedUri", Toast.LENGTH_LONG).show()
-                }
-
-                override fun onError(exception: ImageCaptureException) {
-                    Log.e(Constants.TAG, "onError: ${exception.message}", exception)
-                }
-            }
-        )
+        val toast = Toast(context)
+        toast.duration = Toast.LENGTH_SHORT
+        toast.view = layout
+        toast.show()
     }
 
 
+    @SuppressLint("InflateParams")
+    private fun displayPermissionDialog() : Boolean {
+        val dialog = BottomSheetDialog(this, R.style.CenteredBottomSheetDialog)
+        val view = layoutInflater.inflate(R.layout.btm_dialog_permission, null)
 
-    private fun getOutputDirectory() : File {
-        val mediaDir = externalMediaDirs.firstOrNull()?.let { mFile ->
-            File(mFile, resources.getString(R.string.app_name)).apply {
-                mkdirs()
-            }
+        val btEnable = view.findViewById<androidx.appcompat.widget.AppCompatButton>(R.id.bt_enable)
+
+        btEnable.setOnClickListener {
+            checkAndRequestPermissions()
+            dialog.dismiss()
         }
 
-        return if (mediaDir != null && mediaDir.exists())
-            mediaDir else filesDir
-    }
+        dialog.setCancelable(false)
+        dialog.setContentView(view)
+        dialog.show()
 
-    @SuppressLint("WeekBasedYear")
-    private fun takePhoto() {
-        val photoFile = File(outputDirectory,
-            SimpleDateFormat(Constants.FILE_NAME_FORMAT, Locale.getDefault())
-                .format(System.currentTimeMillis()) + ".jpg")
-
-        val outputOption = ImageCapture.OutputFileOptions.Builder(photoFile).build()
-
-
-        // takePicture(outputFileOption, executor, object : ImageCapture.OnImageSavedCallback)
-        // Ảnh lưu trong thư mục Phone/Android/media/
-        imageCapture.takePicture(
-            outputOption,
-            ContextCompat.getMainExecutor(this),
-            object : ImageCapture.OnImageSavedCallback {
-                override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                    val savedUri = Uri.fromFile(photoFile)
-                    val msg = "Photo Saved"
-
-                    Toast.makeText(this@MainActivity, "$msg $savedUri", Toast.LENGTH_LONG).show()
-                }
-
-                override fun onError(exception: ImageCaptureException) {
-                    Log.e(Constants.TAG, "onError: ${exception.message}", exception)
-                }
-            }
-        )
-    }
-
-
-    // TODO: Start Camera
-    private fun startCamera() {
-        val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
-        cameraProviderFuture.addListener({
-            cameraProvider = cameraProviderFuture.get()
-
-            // Using "also" => To ensure camera preview is modified before assigning to preview xml
-            val preview = Preview.Builder().build().also { mPreview ->
-                mPreview.surfaceProvider = binding.pvView.surfaceProvider
-            }
-
-            imageCapture = ImageCapture.Builder().setCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY).build()
-
-            setUpCamera(cameraProvider, preview)
-
-            observeZoom()
-        }, ContextCompat.getMainExecutor(this))
-    }
-
-    private fun setUpCamera(cameraProvider: ProcessCameraProvider, preview: Preview) {
-        cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-
-        try {
-            cameraProvider.unbindAll()      // Hủy các camera previous
-            camera = cameraProvider.bindToLifecycle(this as LifecycleOwner, cameraSelector, preview, imageCapture)
-            camera.cameraControl.setZoomRatio(3.0f)     // Set initial zoom ratio
-        } catch (e: Exception) {
-            Log.d(Constants.TAG, "startCamera failed: ${e.message}")
-        }
+        return true
     }
 
 
@@ -481,5 +340,4 @@ class MainActivity : AppCompatActivity() {
         Constants.REQUIRED_PERMISSIONS.all {
             ContextCompat.checkSelfPermission(baseContext, it) == PackageManager.PERMISSION_GRANTED
         }
-
 }

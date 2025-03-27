@@ -39,6 +39,12 @@ android {
 }
 
 dependencies {
+    // PhotoView (to zoom image)
+    implementation(libs.gesture.views)
+
+    // KOIN (to run viewModel at same moment with app running)
+    implementation(libs.koin.android)
+
     // CameraX
     implementation("androidx.camera:camera-camera2:1.4.1")
     implementation("androidx.camera:camera-lifecycle:1.4.1")
