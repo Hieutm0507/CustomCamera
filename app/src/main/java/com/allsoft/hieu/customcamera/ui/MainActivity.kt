@@ -41,6 +41,7 @@ class MainActivity : AppCompatActivity() {
     private var isPaused : Boolean = false
     private lateinit var sharedPreferences: SharedPreferences
     private var isFirstTime : Boolean = true
+    private var isFirstCap : Boolean = true
 
 
     // TODO: ASK PERMISSIONS using ActivityResultLauncher
@@ -115,6 +116,7 @@ class MainActivity : AppCompatActivity() {
         }
         //-------------------------------
 
+
         cameraExecutor = Executors.newSingleThreadExecutor()
 
         observeZoom()
@@ -141,6 +143,11 @@ class MainActivity : AppCompatActivity() {
 
         binding.ibCamera.setOnClickListener {
             togglePause()
+
+            if (isFirstCap) {
+                goToCapInstruct()
+                saveData()
+            }
         }
     }
 
@@ -171,6 +178,8 @@ class MainActivity : AppCompatActivity() {
         val editor = sharedPreferences.edit()
         Log.d("TAG_P_SAVE", isFirstTime.toString())
         editor.putBoolean("isFirstTime", isFirstTime)
+        Log.d("TAG_P_SAVE", isFirstCap.toString())
+        editor.putBoolean("isFirstCap", isFirstCap)
         editor.apply()
     }
 
@@ -178,6 +187,8 @@ class MainActivity : AppCompatActivity() {
         sharedPreferences = this.getSharedPreferences(Constants.PREFERENCE, MODE_PRIVATE)
         isFirstTime = sharedPreferences.getBoolean("isFirstTime", true)
         Log.d("TAG_P_CALL", isFirstTime.toString())
+        isFirstCap = sharedPreferences.getBoolean("isFirstCap", true)
+        Log.d("TAG_P_CALL", isFirstCap.toString())
     }
 
     private fun goToInstruction() {
@@ -187,6 +198,15 @@ class MainActivity : AppCompatActivity() {
         ft.commit()
 
         isFirstTime = false
+    }
+
+    private fun goToCapInstruct() {
+        val ft : FragmentTransaction = supportFragmentManager.beginTransaction()
+        ft.add(R.id.fl_display_fragment, GuidelineCaptureFragment())
+        ft.addToBackStack(null)
+        ft.commit()
+
+        isFirstCap = false
     }
 
     // TODO: Freeze the image

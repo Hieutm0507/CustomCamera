@@ -14,8 +14,10 @@
     <string name="instruct_4">Tap here to take a photo</string>
     <string name="instruct_5">Tap here to zoom in</string>
     <string name="next">Next</string>
+    <string name="finish">Finish</string>
     <string name="enable_permission">Enable Permission</string>
     <string name="permission_description">This app uses your camera to magnify images. Please enable camera permissions.</string>
     <string name="camera_access">Camera Access</string>
     <string name="success_message">Your image is saved successfully</string>
+    <string name="instruct_cap">Use two fingers to\nzoom in or out on the image.</string>
 </resources>

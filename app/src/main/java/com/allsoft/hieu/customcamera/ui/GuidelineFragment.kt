@@ -83,6 +83,7 @@ class GuidelineFragment : Fragment() {
             5 -> {
                 binding.tvStep.text = "5/5"
                 binding.tvInstruction.text = getString(R.string.instruct_5)
+                binding.btNext.setText(R.string.finish)
                 binding.ibZoomIn.visibility = View.VISIBLE
                 binding.ivArrow5.visibility = View.VISIBLE
                 binding.ibCamera.visibility = View.INVISIBLE
