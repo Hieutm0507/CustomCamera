@@ -11,10 +11,8 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.ScaleGestureDetector
-import android.widget.Toast
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.core.ZoomState
 import androidx.camera.lifecycle.ProcessCameraProvider
@@ -83,8 +81,7 @@ class CameraViewModel : ViewModel() {
     // TODO: Zooming Camera
     // 2.1 Zooming by buttons
     fun adjustZoom (isZoomIn : Boolean) {
-        val cameraInfo = camera.cameraInfo
-        val currentZoomRatio = cameraInfo.zoomState.value?.zoomRatio ?: 3f
+        val currentZoomRatio = camera.cameraInfo.zoomState.value?.zoomRatio ?: 1f
 
         val newZoomRatio =
             if (isZoomIn) {

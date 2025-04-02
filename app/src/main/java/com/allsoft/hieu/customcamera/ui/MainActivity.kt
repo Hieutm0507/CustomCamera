@@ -48,6 +48,13 @@ class MainActivity : AppCompatActivity() {
     private val launcher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
         if (permissions.all { it.value }) {
             cameraViewModel.startCamera(this, binding.pvView, this as LifecycleOwner)
+
+            // TODO: Direct to Instruction Fragment after all permissions are granted
+            callData()
+            if (isFirstTime) {
+                goToInstruction()
+                saveData()
+            }
         }
         else {
             Toast.makeText(this, "Permission not granted", Toast.LENGTH_SHORT).show()
@@ -105,15 +112,6 @@ class MainActivity : AppCompatActivity() {
         val animator = ObjectAnimator.ofInt(binding.pbLoading, "progress", 0, 100)
         animator.duration = Constants.LOADING_TIME
         animator.start()
-        //-------------------------------
-
-
-        // TODO: Direct to Instruction Fragment
-        callData()
-        if (isFirstTime) {
-            goToInstruction()
-            saveData()
-        }
         //-------------------------------
 
 
