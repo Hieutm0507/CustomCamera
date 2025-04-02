@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Smart Magnifier</string>
+    <string name="turn_on_camera">Kamera einschalten</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="setting">Einstellungen</string>
+    <string name="privacy_policy">Datenschutzrichtlinie</string>
+    <string name="loading">Wird geladen...</string>
+    <string name="instruct_1">Tippen Sie hier, um die Taschenlampe einzuschalten.</string>
+    <string name="instruct_2">Tippen Sie hier, um die Helligkeit anzupassen.</string>
+    <string name="instruct_3">Tippen Sie hier, um herauszuzoomen.</string>
+    <string name="instruct_4">Tippen Sie hier, um ein Foto zu machen.</string>
+    <string name="instruct_5">Tippen Sie hier, um hinein zu zoomen.</string>
+    <string name="next">Weiter</string>
+    <string name="finish">Fertig</string>
+    <string name="enable_permission">Berechtigung aktivieren</string>
+    <string name="permission_description">Diese App verwendet Ihre Kamera, um Bilder zu vergrößern. Bitte erteilen Sie die Kamera-Berechtigungen.</string>
+    <string name="camera_access">Zugriff auf die Kamera</string>
+    <string name="success_message">Ihr Bild wurde erfolgreich gespeichert</string>
+    <string name="instruct_cap">Verwenden Sie zwei Finger,\num das Bild hinein- oder herauszuzoomen.</string>
+</resources>

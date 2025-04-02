@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Smart Magnifier</string>
+    <string name="turn_on_camera">Bật Camera</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="setting">Cài đặt</string>
+    <string name="privacy_policy">Chính sách quyền riêng tư</string>
+    <string name="loading">Đang tải...</string>
+    <string name="instruct_1">Nhấn vào đây để bật đèn pin.</string>
+    <string name="instruct_2">Nhấn vào đây để chỉnh độ sáng.</string>
+    <string name="instruct_3">Nhấn vào đây để thu nhỏ.</string>
+    <string name="instruct_4">Nhấn vào đây để chụp ảnh.</string>
+    <string name="instruct_5">Nhấn vào đây để phóng to.</string>
+    <string name="next">Tiếp</string>
+    <string name="finish">Xong</string>
+    <string name="enable_permission">Cấp quyền truy cập</string>
+    <string name="permission_description">Ứng dụng này sử dụng camera của bạn để phóng to hình ảnh. Vui lòng cấp quyền truy cập camera.</string>
+    <string name="camera_access">Truy cập Camera</string>
+    <string name="success_message">Đã lưu ảnh thành công</string>
+    <string name="instruct_cap">Dùng hai ngón tay để\nphóng to hoặc thu nhỏ hình ảnh.</string>
+</resources>

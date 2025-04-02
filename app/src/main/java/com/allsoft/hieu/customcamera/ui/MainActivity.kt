@@ -159,15 +159,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        cameraViewModel.releaseCamera()
         saveData()
     }
 
     override fun onResume() {
         super.onResume()
-        if (allPermissionGranted()) {
-            cameraViewModel.startCamera(this, binding.pvView, this as LifecycleOwner)
-        }
         callData()
     }
 
