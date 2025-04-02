@@ -57,20 +57,22 @@ class CameraViewModel : ViewModel() {
 
             imageCapture = ImageCapture.Builder().setCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY).build()
 
-            setUpCamera(cameraProvider, preview, lifecycleOwner)
+            setUpCamera(context, cameraProvider, preview, lifecycleOwner)
 
             observeCameraZoom()
 
         }, ContextCompat.getMainExecutor(context))
     }
 
-    private fun setUpCamera(cameraProvider: ProcessCameraProvider, preview: Preview, lifecycleOwner: LifecycleOwner) {
+    private fun setUpCamera(context: Context, cameraProvider: ProcessCameraProvider, preview: Preview, lifecycleOwner: LifecycleOwner) {
         cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
         try {
             cameraProvider.unbindAll()      // Hủy các camera previous
             camera = cameraProvider.bindToLifecycle(lifecycleOwner, cameraSelector, preview, imageCapture)
-            camera.cameraControl.setZoomRatio(3.0f)     // Set initial zoom ratio
+            camera.cameraControl.setZoomRatio(3.0f).addListener({
+                Log.d(Constants.TAG, camera.cameraInfo.zoomState.value.toString())
+            }, ContextCompat.getMainExecutor(context))     // Set initial zoom ratio
         } catch (e: Exception) {
             Log.d(Constants.TAG, "startCamera failed: ${e.message}")
         }

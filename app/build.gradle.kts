@@ -46,12 +46,12 @@ dependencies {
     implementation(libs.koin.android)
 
     // CameraX
-    implementation("androidx.camera:camera-camera2:1.4.1")
-    implementation("androidx.camera:camera-lifecycle:1.4.1")
-    implementation("androidx.camera:camera-video:1.4.1")
-    implementation("androidx.camera:camera-view:1.4.1")
+    implementation(libs.androidx.camera.camera2)
+    implementation(libs.androidx.camera.lifecycle)
+    implementation(libs.androidx.camera.video)
+    implementation(libs.androidx.camera.view)
 
-    implementation("androidx.camera:camera-core:1.4.1")
+    implementation(libs.androidx.camera.core)
 
 
     implementation(libs.androidx.core.ktx)
