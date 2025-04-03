@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Magnifier</string>
+    <string name="turn_on_camera">Włącz aparat</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="setting">Ustawienia</string>
+    <string name="version">Wersja</string>
+    <string name="privacy_policy">Polityka prywatności</string>
+    <string name="loading">Ładowanie...</string>
+    <string name="instruct_1">Dotknij tutaj, aby włączyć latarkę.</string>
+    <string name="instruct_2">Dotknij tutaj, aby dostosować jasność.</string>
+    <string name="instruct_3">Dotknij tutaj, aby zmniejszyć zoom.</string>
+    <string name="instruct_4">Dotknij tutaj, aby zrobić zdjęcie.</string>
+    <string name="instruct_5">Dotknij tutaj, aby powiększyć.</string>
+    <string name="next">Dalej</string>
+    <string name="finish">Zakończ</string>
+    <string name="enable_permission">Włącz uprawnienia</string>
+    <string name="permission_description">Aplikacja korzysta z twojego aparatu do powiększania obrazów. Proszę włączyć uprawnienia do aparatu.</string>
+    <string name="camera_access">Dostęp do aparatu</string>
+    <string name="success_message">Twoje zdjęcie zostało zapisane pomyślnie</string>
+    <string name="instruct_cap">Użyj dwóch palców,\naby powiększyć lub zmniejszyć obraz.</string>
+</resources>

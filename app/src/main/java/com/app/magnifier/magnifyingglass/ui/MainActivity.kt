@@ -1,4 +1,4 @@
-package com.allsoft.hieu.customcamera.ui
+package com.app.magnifier.magnifyingglass.ui
 
 import android.Manifest
 import android.animation.ObjectAnimator
@@ -23,10 +23,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.LifecycleOwner
-import com.allsoft.hieu.customcamera.R
-import com.allsoft.hieu.customcamera.databinding.ActivityMainBinding
-import com.allsoft.hieu.customcamera.utils.Constants
-import com.allsoft.hieu.customcamera.viewmodel.CameraViewModel
+import com.app.magnifier.magnifyingglass.R
+import com.app.magnifier.magnifyingglass.databinding.ActivityMainBinding
+import com.app.magnifier.magnifyingglass.utils.Constants
+import com.app.magnifier.magnifyingglass.viewmodel.CameraViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Locale

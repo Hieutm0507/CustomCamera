@@ -1,4 +1,4 @@
-package com.allsoft.hieu.customcamera
+package com.app.magnifier.magnifyingglass
 
 import org.junit.Test
 

@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.allsoft.hieu.customcamera"
+    namespace = "com.app.magnifier.magnifyingglass"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.allsoft.hieu.customcamera"
+        applicationId = "com.app.magnifier.magnifyingglass"
         minSdk = 24
         targetSdk = 35
         versionCode = 1

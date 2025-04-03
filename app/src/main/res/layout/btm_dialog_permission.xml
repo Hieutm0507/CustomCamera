@@ -5,8 +5,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/bg_fragment_permiss"
-    android:padding="20dp"
-    tools:context=".ui.PermissionFragment">
+    android:padding="20dp">
 
     <ImageView
         android:id="@+id/iv_icon"

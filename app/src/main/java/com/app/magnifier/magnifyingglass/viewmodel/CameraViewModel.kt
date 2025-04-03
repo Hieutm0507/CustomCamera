@@ -1,4 +1,4 @@
-package com.allsoft.hieu.customcamera.viewmodel
+package com.app.magnifier.magnifyingglass.viewmodel
 
 import android.annotation.SuppressLint
 import android.content.ContentValues
@@ -23,7 +23,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
 import androidx.lifecycle.ViewModel
-import com.allsoft.hieu.customcamera.utils.Constants
+import com.app.magnifier.magnifyingglass.utils.Constants
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream

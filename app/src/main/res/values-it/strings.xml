@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Magnifier</string>
+    <string name="turn_on_camera">Accendi la fotocamera</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="setting">Impostazioni</string>
+    <string name="version">Versione</string>
+    <string name="privacy_policy">Informativa sulla privacy</string>
+    <string name="loading">Caricamento...</string>
+    <string name="instruct_1">Tocca qui per accendere la torcia.</string>
+    <string name="instruct_2">Tocca qui per regolare la luminosità.</string>
+    <string name="instruct_3">Tocca qui per ridurre lo zoom.</string>
+    <string name="instruct_4">Tocca qui per scattare una foto.</string>
+    <string name="instruct_5">Tocca qui per ingrandire.</string>
+    <string name="next">Avanti</string>
+    <string name="finish">Fine</string>
+    <string name="enable_permission">Abilita permesso</string>
+    <string name="permission_description">Questa app utilizza la tua fotocamera per ingrandire le immagini. Per favore, abilita i permessi della fotocamera.</string>
+    <string name="camera_access">Accesso alla fotocamera</string>
+    <string name="success_message">La tua immagine è stata salvata con successo</string>
+    <string name="instruct_cap">Usa due dita per\nzoomare dentro o fuori sull\'immagine.</string>
+</resources>

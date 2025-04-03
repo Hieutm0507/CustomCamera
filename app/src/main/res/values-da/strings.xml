@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Magnifier</string>
+    <string name="turn_on_camera">Tænd for kameraet</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="setting">Indstillinger</string>
+    <string name="version">Version</string>
+    <string name="privacy_policy">Privatlivspolitik</string>
+    <string name="loading">Indlæser...</string>
+    <string name="instruct_1">Tryk her for at tænde lommelygten.</string>
+    <string name="instruct_2">Tryk her for at justere lysstyrken.</string>
+    <string name="instruct_3">Tryk her for at zoome ud.</string>
+    <string name="instruct_4">Tryk her for at tage et billede.</string>
+    <string name="instruct_5">Tryk her for at zoome ind.</string>
+    <string name="next">Næste</string>
+    <string name="finish">Afslut</string>
+    <string name="enable_permission">Aktivér tilladelse</string>
+    <string name="permission_description">Denne app bruger dit kamera til at forstørre billeder. Aktivér venligst kameratilladelser.</string>
+    <string name="camera_access">Camera Kameratilladelse</string>
+    <string name="success_message">Dit billede er gemt</string>
+    <string name="instruct_cap">Brug to fingre for\nat zoome ind eller ud på billedet.</string>
+</resources>

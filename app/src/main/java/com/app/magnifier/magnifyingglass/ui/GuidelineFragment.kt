@@ -1,4 +1,4 @@
-package com.allsoft.hieu.customcamera.ui
+package com.app.magnifier.magnifyingglass.ui
 
 import android.os.Bundle
 import android.util.TypedValue
@@ -7,8 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintSet
-import com.allsoft.hieu.customcamera.R
-import com.allsoft.hieu.customcamera.databinding.FragmentGuidelineBinding
+import com.app.magnifier.magnifyingglass.R
+import com.app.magnifier.magnifyingglass.databinding.FragmentGuidelineBinding
 
 
 class GuidelineFragment : Fragment() {

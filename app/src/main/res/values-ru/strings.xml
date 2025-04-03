@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Magnifier</string>
+    <string name="turn_on_camera">Включить камеру</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="setting">Настройки</string>
+    <string name="version">Версия</string>
+    <string name="privacy_policy">Политика конфиденциальности</string>
+    <string name="loading">Загрузка...</string>
+    <string name="instruct_1">Нажмите здесь, чтобы включить фонарик.</string>
+    <string name="instruct_2">Нажмите здесь, чтобы настроить яркость.</string>
+    <string name="instruct_3">Нажмите здесь, чтобы уменьшить масштаб.</string>
+    <string name="instruct_4">Нажмите здесь, чтобы сделать фото.</string>
+    <string name="instruct_5">Нажмите здесь, чтобы увеличить масштаб.</string>
+    <string name="next">Далее</string>
+    <string name="finish">Завершить</string>
+    <string name="enable_permission">Включить разрешение</string>
+    <string name="permission_description">Это приложение использует вашу камеру для увеличения изображений. Пожалуйста, включите разрешения для камеры.</string>
+    <string name="camera_access">Доступ к камере</string>
+    <string name="success_message">Ваше изображение успешно сохранено</string>
+    <string name="instruct_cap">Используйте два пальца, чтобы увеличить или уменьшить масштаб изображения.</string>
+</resources>

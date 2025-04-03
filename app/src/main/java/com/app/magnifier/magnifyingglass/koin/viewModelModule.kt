@@ -1,6 +1,6 @@
-package com.allsoft.hieu.customcamera.koin
+package com.app.magnifier.magnifyingglass.koin
 
-import com.allsoft.hieu.customcamera.viewmodel.CameraViewModel
+import com.app.magnifier.magnifyingglass.viewmodel.CameraViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 

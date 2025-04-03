@@ -1,12 +1,14 @@
-package com.allsoft.hieu.customcamera.ui
+package com.app.magnifier.magnifyingglass.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.allsoft.hieu.customcamera.R
-import com.allsoft.hieu.customcamera.databinding.FragmentSettingBinding
+import com.app.magnifier.magnifyingglass.R
+import com.app.magnifier.magnifyingglass.databinding.FragmentSettingBinding
+import com.app.magnifier.magnifyingglass.utils.Constants
 
 class SettingFragment : Fragment() {
     private lateinit var binding: FragmentSettingBinding
@@ -23,10 +25,11 @@ class SettingFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.
+        binding.tvAppVersion.text = getString(R.string.version) + ": " + Constants.APP_VERSION
 
         binding.ivBack.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()

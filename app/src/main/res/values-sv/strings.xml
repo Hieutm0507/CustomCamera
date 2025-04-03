@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Magnifier</string>
+    <string name="turn_on_camera">Sätt på kameran</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="setting">Inställningar</string>
+    <string name="version">Version</string>
+    <string name="privacy_policy">Integritetspolicy</string>
+    <string name="loading">Laddar...</string>
+    <string name="instruct_1">Tryck här för att slå på ficklampan.</string>
+    <string name="instruct_2">Tryck här för att justera ljusstyrkan.</string>
+    <string name="instruct_3">Tryck här för att zooma ut.</string>
+    <string name="instruct_4">Tryck här för att ta ett foto.</string>
+    <string name="instruct_5">Tryck här för att zooma in.</string>
+    <string name="next">Nästa</string>
+    <string name="finish">Klart</string>
+    <string name="enable_permission">Aktivera behörighet</string>
+    <string name="permission_description">Denna app använder din kamera för att förstora bilder. Vänligen aktivera kamerabehörigheter.</string>
+    <string name="camera_access">Kameråtkomst</string>
+    <string name="success_message">Din bild har sparats framgångsrikt</string>
+    <string name="instruct_cap">Använd två fingrar för\natt zooma in eller ut på bilden.</string>
+</resources>

@@ -1,4 +1,4 @@
-package com.allsoft.hieu.customcamera
+package com.app.magnifier.magnifyingglass
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

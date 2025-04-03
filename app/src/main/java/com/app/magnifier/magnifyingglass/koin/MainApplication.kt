@@ -1,4 +1,4 @@
-package com.allsoft.hieu.customcamera.koin
+package com.app.magnifier.magnifyingglass.koin
 
 import android.app.Application
 import org.koin.android.ext.koin.androidContext

@@ -1,4 +1,4 @@
-package com.allsoft.hieu.customcamera.utils
+package com.app.magnifier.magnifyingglass.utils
 
 import android.Manifest
 
