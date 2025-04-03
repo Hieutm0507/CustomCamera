@@ -27,7 +27,14 @@ import com.app.magnifier.magnifyingglass.R
 import com.app.magnifier.magnifyingglass.databinding.ActivityMainBinding
 import com.app.magnifier.magnifyingglass.utils.Constants
 import com.app.magnifier.magnifyingglass.viewmodel.CameraViewModel
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Locale
 import java.util.concurrent.ExecutorService
@@ -57,7 +64,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         else {
-            Toast.makeText(this, "Permission not granted", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.permission_not_granted), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -94,6 +101,23 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         enableEdgeToEdge()
+
+        // TODO: AD
+        CoroutineScope(Dispatchers.Main).launch {
+            MobileAds.initialize(this@MainActivity) {}
+        }
+
+        val adView = AdView(this)
+        adView.adUnitId = "ca-app-pub-3940256099942544~3347511713"
+
+        adView.setAdSize(AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, 360))
+
+        binding.flAdContainer.removeAllViews()
+        binding.flAdContainer.addView(adView)
+
+        val adRequest = AdRequest.Builder().build()
+        adView.loadAd(adRequest)
+
 
         // TODO: Splash Screen
         Handler(Looper.getMainLooper()).postDelayed(
@@ -134,6 +158,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.ibSetting.setOnClickListener {
             val ft : FragmentTransaction = supportFragmentManager.beginTransaction()
+            ft.setCustomAnimations(R.anim.slide_in, 0)
             ft.replace(R.id.fl_display_fragment, SettingFragment())
             ft.addToBackStack(null)
             ft.commit()
@@ -320,7 +345,7 @@ class MainActivity : AppCompatActivity() {
         val layout = inflater.inflate(R.layout.custom_success_toast, null)
 
         val textView = layout.findViewById<TextView>(R.id.tv_success_message)
-        textView.text = "Your image is saved successfully"
+        textView.text = getString(R.string.success_message)
 
         val toast = Toast(context)
         toast.duration = Toast.LENGTH_SHORT

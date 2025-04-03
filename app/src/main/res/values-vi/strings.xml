@@ -19,4 +19,5 @@
     <string name="camera_access">Truy cập Camera</string>
     <string name="success_message">Đã lưu ảnh thành công</string>
     <string name="instruct_cap">Dùng hai ngón tay để\nphóng to hoặc thu nhỏ hình ảnh.</string>
+    <string name="permission_not_granted">Không được cấp phép</string>
 </resources>

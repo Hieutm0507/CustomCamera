@@ -19,4 +19,5 @@
     <string name="camera_access">Dostęp do aparatu</string>
     <string name="success_message">Twoje zdjęcie zostało zapisane pomyślnie</string>
     <string name="instruct_cap">Użyj dwóch palców,\naby powiększyć lub zmniejszyć obraz.</string>
+    <string name="permission_not_granted">Zezwolenie nie zostało przyznane</string>
 </resources>

@@ -19,4 +19,5 @@
     <string name="camera_access">Accesso alla fotocamera</string>
     <string name="success_message">La tua immagine è stata salvata con successo</string>
     <string name="instruct_cap">Usa due dita per\nzoomare dentro o fuori sull\'immagine.</string>
+    <string name="permission_not_granted">Permesso non concesso</string>
 </resources>

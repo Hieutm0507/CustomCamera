@@ -19,4 +19,5 @@
     <string name="camera_access">Kameråtkomst</string>
     <string name="success_message">Din bild har sparats framgångsrikt</string>
     <string name="instruct_cap">Använd två fingrar för\natt zooma in eller ut på bilden.</string>
+    <string name="permission_not_granted">Behörighet inte beviljad</string>
 </resources>

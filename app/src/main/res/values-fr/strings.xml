@@ -19,4 +19,5 @@
     <string name="camera_access">Accès à la caméra</string>
     <string name="success_message">Votre image a été enregistrée avec succès</string>
     <string name="instruct_cap">Utilisez deux doigts pour\nzoomer ou dézoomer sur l\'image.</string>
+    <string name="permission_not_granted">Permission non accordée</string>
 </resources>

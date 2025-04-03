@@ -16,7 +16,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginVertical="10dp"
+        android:layout_marginTop="10dp"
         android:fitsSystemWindows="true">
 
         <androidx.appcompat.widget.AppCompatImageButton
@@ -42,6 +42,7 @@
             app:layout_constraintTop_toTopOf="@id/ib_flash"
             android:orientation="horizontal"
             android:layout_marginHorizontal="10dp"
+            android:gravity="center_horizontal"
             android:background="@drawable/bg_seekbar">
 
             <ImageView
@@ -58,8 +59,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginEnd="12dp"
+                android:paddingVertical="19dp"
+                android:progressDrawable="@drawable/custom_progress"
                 android:progressTint="@color/blue"
                 android:secondaryProgressTint="#C4C4CC"
+                android:splitTrack="false"
                 android:thumb="@drawable/ic_thumb" />
         </LinearLayout>
 
@@ -82,7 +86,8 @@
             android:layout_height="75dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/fl_ad_container"
+            android:layout_marginBottom="10dp"
             android:src="@drawable/ic_capture"
             android:background="@drawable/bg_camera"
             android:contentDescription="@string/turn_on_camera"/>
@@ -133,6 +138,12 @@
             android:textStyle="bold"
             tools:ignore="HardcodedText"
             android:visibility="invisible"/>
+        
+        <FrameLayout
+            android:id="@+id/fl_ad_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <FrameLayout

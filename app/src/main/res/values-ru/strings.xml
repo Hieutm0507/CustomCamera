@@ -19,4 +19,5 @@
     <string name="camera_access">Доступ к камере</string>
     <string name="success_message">Ваше изображение успешно сохранено</string>
     <string name="instruct_cap">Используйте два пальца, чтобы увеличить или уменьшить масштаб изображения.</string>
+    <string name="permission_not_granted">Разрешение не предоставлено</string>
 </resources>

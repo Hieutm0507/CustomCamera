@@ -32,7 +32,10 @@ class SettingFragment : Fragment() {
         binding.tvAppVersion.text = getString(R.string.version) + ": " + Constants.APP_VERSION
 
         binding.ivBack.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
+            val ft = requireActivity().supportFragmentManager.beginTransaction()
+            ft.setCustomAnimations(0, R.anim.slide_out)
+            ft.remove(this)
+            ft.commit()
         }
     }
 }
