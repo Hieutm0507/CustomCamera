@@ -64,10 +64,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Version: 1.0"
+            android:text="aaa"
             android:textColor="#4D4D4D"
-            android:textSize="18sp"
-            tools:ignore="HardcodedText"/>
+            android:textSize="18sp"/>
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatImageButton

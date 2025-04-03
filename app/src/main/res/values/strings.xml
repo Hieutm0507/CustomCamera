@@ -1,8 +1,9 @@
 <resources>
-    <string name="app_name">Smart Magnifier</string>
+    <string name="app_name">Magnifier</string>
     <string name="turn_on_camera">Turn on Camera</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="setting">Setting</string>
+    <string name="version">Version</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="loading">Loading...</string>
     <string name="instruct_1">Tap here to turn on the flashlight.</string>

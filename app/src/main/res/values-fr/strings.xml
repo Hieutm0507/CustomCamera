@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Magnifier</string>
+    <string name="turn_on_camera">Allumer la caméra</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="setting">Paramètres</string>
+    <string name="privacy_policy">Politique de confidentialité</string>
+    <string name="version">Version</string>
+    <string name="loading">Chargement...</string>
+    <string name="instruct_1">Appuyez ici pour allumer la lampe de poche.</string>
+    <string name="instruct_2">Appuyez ici pour ajuster la luminosité.</string>
+    <string name="instruct_3">Appuyez ici pour dézoomer.</string>
+    <string name="instruct_4">Appuyez ici pour prendre une photo.</string>
+    <string name="instruct_5">Appuyez ici pour zoomer.</string>
+    <string name="next">Suivant</string>
+    <string name="finish">Terminer</string>
+    <string name="enable_permission">Activer l\'autorisation</string>
+    <string name="permission_description">Cette application utilise votre caméra pour agrandir les images. Veuillez activer les autorisations de la caméra.</string>
+    <string name="camera_access">Accès à la caméra</string>
+    <string name="success_message">Votre image a été enregistrée avec succès</string>
+    <string name="instruct_cap">Utilisez deux doigts pour\nzoomer ou dézoomer sur l\'image.</string>
+</resources>

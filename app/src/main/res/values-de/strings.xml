@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Smart Magnifier</string>
+    <string name="app_name">Magnifier</string>
     <string name="turn_on_camera">Kamera einschalten</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="setting">Einstellungen</string>
     <string name="privacy_policy">Datenschutzrichtlinie</string>
+    <string name="version">Version</string>
     <string name="loading">Wird geladen...</string>
     <string name="instruct_1">Tippen Sie hier, um die Taschenlampe einzuschalten.</string>
     <string name="instruct_2">Tippen Sie hier, um die Helligkeit anzupassen.</string>

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Smart Magnifier</string>
+    <string name="app_name">Magnifier</string>
     <string name="turn_on_camera">Bật Camera</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="setting">Cài đặt</string>
     <string name="privacy_policy">Chính sách quyền riêng tư</string>
+    <string name="version">Phiên bản</string>
     <string name="loading">Đang tải...</string>
     <string name="instruct_1">Nhấn vào đây để bật đèn pin.</string>
     <string name="instruct_2">Nhấn vào đây để chỉnh độ sáng.</string>
