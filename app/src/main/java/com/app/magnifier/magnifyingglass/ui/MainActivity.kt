@@ -14,6 +14,8 @@ import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.Button
+import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
@@ -25,12 +27,19 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.LifecycleOwner
 import com.app.magnifier.magnifyingglass.R
 import com.app.magnifier.magnifyingglass.databinding.ActivityMainBinding
+import com.app.magnifier.magnifyingglass.databinding.LayoutNativeAdBinding
 import com.app.magnifier.magnifyingglass.utils.Constants
 import com.app.magnifier.magnifyingglass.viewmodel.CameraViewModel
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.nativead.NativeAd
+import com.google.android.gms.ads.nativead.NativeAdOptions
+import com.google.android.gms.ads.nativead.NativeAdView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -49,6 +58,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var sharedPreferences: SharedPreferences
     private var isFirstTime : Boolean = true
     private var isFirstCap : Boolean = true
+    private lateinit var adLoader: AdLoader
 
 
     // TODO: ASK PERMISSIONS using ActivityResultLauncher
@@ -102,21 +112,38 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         enableEdgeToEdge()
 
-        // TODO: AD
+        // TODO: ADs using Native
         CoroutineScope(Dispatchers.Main).launch {
             MobileAds.initialize(this@MainActivity) {}
         }
 
-        val adView = AdView(this)
-        adView.adUnitId = "ca-app-pub-3940256099942544~3347511713"
+        adLoader = AdLoader.Builder(this, "ca-app-pub-3940256099942544/2247696110")
+            .forNativeAd { ad : NativeAd ->
+                if (adLoader.isLoading) {
+                    Toast.makeText(this, "Ads loading", Toast.LENGTH_SHORT).show()
+                }
+                else {
+                    val adView = layoutInflater.inflate(R.layout.layout_native_ad, null) as NativeAdView
+                    populateNativeAdView(ad, adView)
+                    binding.flAdContainer.removeAllViews()
+                    binding.flAdContainer.addView(adView)
+                }
 
-        adView.setAdSize(AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, 360))
+                if (isDestroyed) {
+                    ad.destroy()
+                    return@forNativeAd
+                }
+            }.withAdListener(object : AdListener() {
+                override fun onAdFailedToLoad(e: LoadAdError) {
+                    super.onAdFailedToLoad(e)
+                    Log.e("AdLoader", "Ad failed to load: ${e.message}")
+                    Toast.makeText(this@MainActivity, "Ad failed: ${e.message}", Toast.LENGTH_LONG).show()
+                }
+            })
+            .withNativeAdOptions(NativeAdOptions.Builder().build())
+            .build()
 
-        binding.flAdContainer.removeAllViews()
-        binding.flAdContainer.addView(adView)
-
-        val adRequest = AdRequest.Builder().build()
-        adView.loadAd(adRequest)
+        adLoader.loadAd(AdRequest.Builder().build())
 
 
         // TODO: Splash Screen
@@ -190,6 +217,23 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         callData()
+    }
+
+    private fun loadNativeAd(context: Context, adView: NativeAdView) {
+
+    }
+
+    private fun populateNativeAdView(nativeAd: NativeAd, nativeAdView: NativeAdView) {
+        val mainImage = nativeAd.images[0].drawable
+        val imageView = nativeAdView.findViewById<ImageView>(R.id.iv_ad)
+        imageView.setImageDrawable(mainImage)
+
+        nativeAdView.findViewById<TextView>(R.id.tv_ad_headline).text = nativeAd.headline
+        nativeAdView.findViewById<TextView>(R.id.tv_ad_body).text = nativeAd.body
+
+        nativeAdView.callToActionView = nativeAdView.findViewById<Button>(R.id.bt_open_ad)
+
+        nativeAdView.setNativeAd(nativeAd)
     }
 
     private fun saveData() {

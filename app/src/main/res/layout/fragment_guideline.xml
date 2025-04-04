@@ -163,6 +163,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginBottom="70dp"
             android:background="@drawable/bg_camera"
             android:contentDescription="@string/turn_on_camera"
             android:src="@drawable/ic_capture"

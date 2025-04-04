@@ -42,7 +42,7 @@ dependencies {
     // AD
     implementation("com.google.android.gms:play-services-ads:24.1.0")
 
-    implementation("com.google.guava:guava:31.1-android")
+    implementation("com.google.guava:guava:33.3.1-android")
 
     // PhotoView (to zoom image)
     implementation(libs.gesture.views)

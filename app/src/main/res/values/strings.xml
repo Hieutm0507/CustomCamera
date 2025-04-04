@@ -19,4 +19,5 @@
     <string name="success_message">Your image is saved successfully</string>
     <string name="instruct_cap">Use two fingers to\nzoom in or out on the image.</string>
     <string name="permission_not_granted">Permission not granted</string>
+    <string name="open">Open</string>
 </resources>

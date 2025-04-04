@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginEnd="12dp"
-                android:paddingVertical="19dp"
+                android:paddingVertical="20dp"
                 android:progressDrawable="@drawable/custom_progress"
                 android:progressTint="@color/blue"
                 android:secondaryProgressTint="#C4C4CC"
@@ -87,7 +87,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@id/fl_ad_container"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="20dp"
             android:src="@drawable/ic_capture"
             android:background="@drawable/bg_camera"
             android:contentDescription="@string/turn_on_camera"/>
