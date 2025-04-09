@@ -137,7 +137,7 @@ class CameraViewModel : ViewModel() {
         val min = exposureState.exposureCompensationRange.lower
         val max = exposureState.exposureCompensationRange.upper
 
-        val exposure = ((progress - 50) / 25.0f).coerceIn(min.toFloat(), max.toFloat())
+        val exposure = (((progress - 50) / 100.0f) * (max - min)).coerceIn(min.toFloat(), max.toFloat())
 
         _exposureIndex.value = exposure.toInt()
         camera.cameraControl.setExposureCompensationIndex(exposure.toInt())
