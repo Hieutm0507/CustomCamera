@@ -19,7 +19,9 @@ android {
 
     buildTypes {
         release {
+            isDebuggable = true
             isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -40,9 +42,9 @@ android {
 
 dependencies {
     // AD
-    implementation("com.google.android.gms:play-services-ads:24.1.0")
+    implementation(libs.play.services.ads)
 
-    implementation("com.google.guava:guava:33.3.1-android")
+    implementation(libs.guava)
 
     // PhotoView (to zoom image)
     implementation(libs.gesture.views)

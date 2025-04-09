@@ -23,18 +23,18 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.LifecycleOwner
 import com.app.magnifier.magnifyingglass.R
 import com.app.magnifier.magnifyingglass.databinding.ActivityMainBinding
-import com.app.magnifier.magnifyingglass.databinding.LayoutNativeAdBinding
 import com.app.magnifier.magnifyingglass.utils.Constants
 import com.app.magnifier.magnifyingglass.viewmodel.CameraViewModel
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdSize
-import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.nativead.NativeAd
@@ -112,38 +112,21 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         enableEdgeToEdge()
 
+
+        // TODO: Hide the Navigation Bar
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        val controller = WindowInsetsControllerCompat(window, window.decorView)
+        controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        controller.hide(WindowInsetsCompat.Type.systemBars())
+
+
         // TODO: ADs using Native
         CoroutineScope(Dispatchers.Main).launch {
             MobileAds.initialize(this@MainActivity) {}
         }
 
-        adLoader = AdLoader.Builder(this, "ca-app-pub-3940256099942544/2247696110")
-            .forNativeAd { ad : NativeAd ->
-                if (adLoader.isLoading) {
-                    Toast.makeText(this, "Ads loading", Toast.LENGTH_SHORT).show()
-                }
-                else {
-                    val adView = layoutInflater.inflate(R.layout.layout_native_ad, null) as NativeAdView
-                    populateNativeAdView(ad, adView)
-                    binding.flAdContainer.removeAllViews()
-                    binding.flAdContainer.addView(adView)
-                }
-
-                if (isDestroyed) {
-                    ad.destroy()
-                    return@forNativeAd
-                }
-            }.withAdListener(object : AdListener() {
-                override fun onAdFailedToLoad(e: LoadAdError) {
-                    super.onAdFailedToLoad(e)
-                    Log.e("AdLoader", "Ad failed to load: ${e.message}")
-                    Toast.makeText(this@MainActivity, "Ad failed: ${e.message}", Toast.LENGTH_LONG).show()
-                }
-            })
-            .withNativeAdOptions(NativeAdOptions.Builder().build())
-            .build()
-
-        adLoader.loadAd(AdRequest.Builder().build())
+        loadNativeAd(this)
 
 
         // TODO: Splash Screen
@@ -219,8 +202,34 @@ class MainActivity : AppCompatActivity() {
         callData()
     }
 
-    private fun loadNativeAd(context: Context, adView: NativeAdView) {
+    private fun loadNativeAd(context: Context) {
+        adLoader = AdLoader.Builder(context, "ca-app-pub-3940256099942544/2247696110")
+            .forNativeAd { ad : NativeAd ->
+                if (adLoader.isLoading) {
+                    Toast.makeText(context, "Ads loading", Toast.LENGTH_SHORT).show()
+                }
+                else {
+                    val adView = layoutInflater.inflate(R.layout.layout_native_ad, null) as NativeAdView
+                    populateNativeAdView(ad, adView)
+                    binding.flAdContainer.removeAllViews()
+                    binding.flAdContainer.addView(adView)
+                }
 
+                if (isDestroyed) {
+                    ad.destroy()
+                    return@forNativeAd
+                }
+            }.withAdListener(object : AdListener() {
+                override fun onAdFailedToLoad(e: LoadAdError) {
+                    super.onAdFailedToLoad(e)
+                    Log.e("AdLoader", "Ad failed to load: ${e.message}")
+                    Toast.makeText(this@MainActivity, "Ad failed: ${e.message}", Toast.LENGTH_LONG).show()
+                }
+            })
+            .withNativeAdOptions(NativeAdOptions.Builder().build())
+            .build()
+
+        adLoader.loadAd(AdRequest.Builder().build())
     }
 
     private fun populateNativeAdView(nativeAd: NativeAd, nativeAdView: NativeAdView) {
