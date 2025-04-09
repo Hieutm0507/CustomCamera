@@ -233,13 +233,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun populateNativeAdView(nativeAd: NativeAd, nativeAdView: NativeAdView) {
+        val headlineView = nativeAdView.findViewById<TextView>(R.id.tv_ad_headline)
+        val bodyView = nativeAdView.findViewById<TextView>(R.id.tv_ad_body)
         val mainImage = nativeAd.images[0].drawable
         val imageView = nativeAdView.findViewById<ImageView>(R.id.iv_ad)
         imageView.setImageDrawable(mainImage)
 
-        nativeAdView.findViewById<TextView>(R.id.tv_ad_headline).text = nativeAd.headline
-        nativeAdView.findViewById<TextView>(R.id.tv_ad_body).text = nativeAd.body
+        headlineView.text = nativeAd.headline
+        bodyView.text = nativeAd.body
 
+        nativeAdView.headlineView = headlineView
+        nativeAdView.bodyView = bodyView
         nativeAdView.callToActionView = nativeAdView.findViewById<Button>(R.id.bt_open_ad)
 
         nativeAdView.setNativeAd(nativeAd)
