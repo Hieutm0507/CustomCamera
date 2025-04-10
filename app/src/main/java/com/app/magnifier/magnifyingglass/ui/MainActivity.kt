@@ -56,6 +56,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var cameraExecutor: ExecutorService
     private var isPaused : Boolean = false
     private lateinit var sharedPreferences: SharedPreferences
+    private var openCount : Int = 0
     private var isFirstTime : Boolean = true
     private var isFirstCap : Boolean = true
     private lateinit var adLoader: AdLoader
@@ -65,13 +66,6 @@ class MainActivity : AppCompatActivity() {
     private val launcher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
         if (permissions.all { it.value }) {
             cameraViewModel.startCamera(this, binding.pvView, this as LifecycleOwner)
-
-            // TODO: Direct to Instruction Fragment after all permissions are granted
-            callData()
-            if (isFirstTime) {
-                goToInstruction()
-                saveData()
-            }
         }
         else {
             Toast.makeText(this, getString(R.string.permission_not_granted), Toast.LENGTH_SHORT).show()
@@ -199,7 +193,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+
+        // TODO: Direct to Instruction Fragment after all permissions are granted
         callData()
+        Log.d("TAG", openCount.toString())
+        if (openCount == 2) {
+            goToInstruction()
+            saveData()
+        }
     }
 
     private fun loadNativeAd(context: Context) {
@@ -250,10 +251,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun saveData() {
+        openCount += 1
         sharedPreferences = this.getSharedPreferences(Constants.PREFERENCE, MODE_PRIVATE)
         val editor = sharedPreferences.edit()
-        Log.d("TAG_P_SAVE", isFirstTime.toString())
-        editor.putBoolean("isFirstTime", isFirstTime)
+        Log.d("TAG_P_SAVE", openCount.toString())
+        editor.putInt("openCount", openCount)
+//        Log.d("TAG_P_SAVE", isFirstTime.toString())
+//        editor.putBoolean("isFirstTime", isFirstTime)
         Log.d("TAG_P_SAVE", isFirstCap.toString())
         editor.putBoolean("isFirstCap", isFirstCap)
         editor.apply()
@@ -261,8 +265,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun callData() {
         sharedPreferences = this.getSharedPreferences(Constants.PREFERENCE, MODE_PRIVATE)
-        isFirstTime = sharedPreferences.getBoolean("isFirstTime", true)
-        Log.d("TAG_P_CALL", isFirstTime.toString())
+        openCount = sharedPreferences.getInt("openCount", 0)
+//        isFirstTime = sharedPreferences.getBoolean("isFirstTime", true)
+//        Log.d("TAG_P_CALL", isFirstTime.toString())
         isFirstCap = sharedPreferences.getBoolean("isFirstCap", true)
         Log.d("TAG_P_CALL", isFirstCap.toString())
     }
@@ -273,7 +278,7 @@ class MainActivity : AppCompatActivity() {
         ft.addToBackStack(null)
         ft.commit()
 
-        isFirstTime = false
+//        isFirstTime = false
     }
 
     private fun goToCapInstruct() {
@@ -319,7 +324,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         cameraViewModel.flashState.observe(this) { flashState ->
-            val background = ContextCompat.getDrawable(this, R.drawable.bg_buttons)
+            val background = ContextCompat.getDrawable(this, R.drawable.bg_buttons_trans)
             val iconColor = ContextCompat.getDrawable(this, R.drawable.ic_flash)
 
             if (flashState) {

@@ -15,8 +15,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/fl_ad_container"
         android:fitsSystemWindows="true">
 
         <androidx.appcompat.widget.AppCompatImageButton
@@ -28,7 +29,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
             android:src="@drawable/ic_flash"
-            android:background="@drawable/bg_buttons"
+            android:background="@drawable/bg_buttons_trans"
             android:contentDescription="Open Flash"
             tools:ignore="HardcodedText"/>
 
@@ -43,7 +44,7 @@
             android:orientation="horizontal"
             android:layout_marginHorizontal="10dp"
             android:gravity="center_horizontal"
-            android:background="@drawable/bg_seekbar">
+            android:background="@drawable/bg_seekbar_trans">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -76,7 +77,7 @@
             app:layout_constraintBottom_toBottomOf="@id/ib_flash"
             android:layout_marginEnd="20dp"
             android:src="@drawable/ic_setting"
-            android:background="@drawable/bg_buttons"
+            android:background="@drawable/bg_buttons_trans"
             android:contentDescription="Open Settings"
             tools:ignore="HardcodedText"/>
 
@@ -86,8 +87,8 @@
             android:layout_height="75dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/fl_ad_container"
-            android:layout_marginBottom="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="5dp"
             android:src="@drawable/ic_capture"
             android:background="@drawable/bg_camera"
             android:contentDescription="@string/turn_on_camera"/>
@@ -103,7 +104,7 @@
             app:layout_constraintBottom_toBottomOf="@id/ib_camera"
             android:layout_marginVertical="3dp"
             android:src="@drawable/ic_minus"
-            android:background="@drawable/bg_buttons"
+            android:background="@drawable/bg_buttons_trans"
             android:contentDescription="Reduce Brightness"
             tools:ignore="HardcodedText"/>
 
@@ -118,7 +119,7 @@
             app:layout_constraintBottom_toBottomOf="@id/ib_camera"
             android:layout_marginVertical="3dp"
             android:src="@drawable/ic_plus"
-            android:background="@drawable/bg_buttons"
+            android:background="@drawable/bg_buttons_trans"
             android:contentDescription="Increase Brightness"
             tools:ignore="HardcodedText"/>
 
@@ -131,20 +132,20 @@
             app:layout_constraintEnd_toEndOf="@id/ib_camera"
             app:layout_constraintBottom_toTopOf="@id/ib_camera"
             android:layout_marginBottom="20dp"
-            android:background="@drawable/bg_seekbar"
+            android:background="@drawable/bg_seekbar_trans"
             android:gravity="center"
             android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold"
             tools:ignore="HardcodedText"
             android:visibility="invisible"/>
-        
-        <FrameLayout
-            android:id="@+id/fl_ad_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_ad_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
     <FrameLayout
         android:id="@+id/fl_display_fragment"

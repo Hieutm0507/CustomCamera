@@ -52,7 +52,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         android:padding="15dp"
-        android:background="@drawable/bg_seekbar"
+        android:background="@drawable/bg_seekbar_trans"
         android:backgroundTint="@color/blue"
         android:text="@string/enable_permission"
         android:textAllCaps="false"

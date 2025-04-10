@@ -79,7 +79,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:src="@drawable/ic_policy"
-        android:background="@drawable/bg_buttons"
+        android:background="@drawable/bg_buttons_trans"
         android:backgroundTint="#E6F4FF"/>
 
     <TextView

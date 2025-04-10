@@ -28,7 +28,7 @@
             android:layout_marginTop="10dp"
             android:padding="7dp"
             android:src="@drawable/ic_back"
-            android:background="@drawable/bg_buttons"
+            android:background="@drawable/bg_buttons_trans"
             android:importantForAccessibility="no"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
