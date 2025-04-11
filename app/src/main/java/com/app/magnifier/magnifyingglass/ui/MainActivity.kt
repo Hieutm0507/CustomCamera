@@ -383,10 +383,10 @@ class MainActivity : AppCompatActivity() {
 
             when (zoomRatio) {
                 cameraViewModel.camera.cameraInfo.zoomState.value?.maxZoomRatio -> {
-                    iconZIColor?.setTint(Color.parseColor("#979797"))
+                    iconZIColor?.setTint(Color.parseColor("#8C8C8C"))
                 }
                 1.0f -> {
-                    iconZOColor?.setTint(Color.parseColor("#979797"))
+                    iconZOColor?.setTint(Color.parseColor("#8C8C8C"))
                 }
                 else -> {
                     iconZIColor?.setTint(Color.parseColor("#000000"))

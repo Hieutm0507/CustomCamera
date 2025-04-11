@@ -20,4 +20,9 @@
     <string name="success_message">Votre image a été enregistrée avec succès</string>
     <string name="instruct_cap">Utilisez deux doigts pour\nzoomer ou dézoomer sur l\'image.</string>
     <string name="permission_not_granted">Permission non accordée</string>
+    <string name="open">Ouvrir</string>
+    <string name="convert_into_text">Convertir en texte</string>
+    <string name="close">Fermer</string>
+    <string name="copy">Copier</string>
+    <string name="image_saved">Image Saved</string>
 </resources>

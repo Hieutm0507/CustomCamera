@@ -2,8 +2,9 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="trans_white">#B3FFFFFF</color>
+    <color name="trans_white">#99FFFFFF</color>
     <color name="blue">#129CFF</color>
     <color name="transparent">#80000000</color>
     <color name="yellow">#FFDE21</color>
+    <color name="grey">#8C8C8C</color>
 </resources>

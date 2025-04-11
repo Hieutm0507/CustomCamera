@@ -20,4 +20,9 @@
     <string name="success_message">Dit billede er gemt</string>
     <string name="instruct_cap">Brug to fingre for\nat zoome ind eller ud på billedet.</string>
     <string name="permission_not_granted">Tilladelse ikke givet</string>
+    <string name="open">Åbn</string>
+    <string name="convert_into_text">Konverter til tekst</string>
+    <string name="close">Luk</string>
+    <string name="copy">Kopiér</string>
+    <string name="image_saved">Image Saved</string>
 </resources>

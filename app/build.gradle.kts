@@ -41,6 +41,9 @@ android {
 }
 
 dependencies {
+    // Recognize Latin text
+    implementation ("com.google.mlkit:text-recognition:16.0.1")
+
     // AD
     implementation(libs.play.services.ads)
 

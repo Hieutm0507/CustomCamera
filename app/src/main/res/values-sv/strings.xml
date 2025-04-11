@@ -20,4 +20,9 @@
     <string name="success_message">Din bild har sparats framgångsrikt</string>
     <string name="instruct_cap">Använd två fingrar för\natt zooma in eller ut på bilden.</string>
     <string name="permission_not_granted">Behörighet inte beviljad</string>
+    <string name="open">Öppna</string>
+    <string name="convert_into_text">Konvertera till text</string>
+    <string name="close">Stäng</string>
+    <string name="copy">Kopiera</string>
+    <string name="image_saved">Image Saved</string>
 </resources>

@@ -20,4 +20,8 @@
     <string name="instruct_cap">Use two fingers to\nzoom in or out on the image.</string>
     <string name="permission_not_granted">Permission not granted</string>
     <string name="open">Open</string>
+    <string name="convert_into_text">Convert into Text</string>
+    <string name="close">Close</string>
+    <string name="copy">Copy</string>
+    <string name="image_saved">Image Saved</string>
 </resources>

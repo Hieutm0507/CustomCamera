@@ -30,5 +30,34 @@
             android:src="@drawable/ic_back"
             android:background="@drawable/bg_buttons_trans"
             android:importantForAccessibility="no"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/bt_convert"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            app:layout_constraintStart_toEndOf="@id/iv_back"
+            app:layout_constraintEnd_toStartOf="@id/iv_delete"
+            app:layout_constraintTop_toTopOf="@id/iv_back"
+            app:layout_constraintBottom_toBottomOf="@id/iv_back"
+            android:paddingHorizontal="20dp"
+            android:background="@drawable/bg_seekbar_trans"
+            android:text="@string/convert_into_text"
+            android:textColor="@color/black"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            android:textSize="18sp"/>
+
+        <ImageView
+            android:id="@+id/iv_delete"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="10dp"
+            android:padding="7dp"
+            android:src="@drawable/ic_delete"
+            android:background="@drawable/bg_buttons_trans"
+            android:importantForAccessibility="no"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

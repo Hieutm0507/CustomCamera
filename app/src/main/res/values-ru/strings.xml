@@ -20,4 +20,9 @@
     <string name="success_message">Ваше изображение успешно сохранено</string>
     <string name="instruct_cap">Используйте два пальца, чтобы увеличить или уменьшить масштаб изображения.</string>
     <string name="permission_not_granted">Разрешение не предоставлено</string>
+    <string name="open">Открыть</string>
+    <string name="convert_into_text">Преобразовать в текст</string>
+    <string name="close">Закрыть</string>
+    <string name="copy">Копировать</string>
+    <string name="image_saved">Image Saved</string>
 </resources>

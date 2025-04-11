@@ -13,10 +13,6 @@ import com.app.magnifier.magnifyingglass.utils.Constants
 class SettingFragment : Fragment() {
     private lateinit var binding: FragmentSettingBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

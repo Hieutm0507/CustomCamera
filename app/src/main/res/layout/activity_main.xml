@@ -63,7 +63,7 @@
                 android:paddingVertical="20dp"
                 android:progressDrawable="@drawable/custom_progress"
                 android:progressTint="@color/blue"
-                android:secondaryProgressTint="#C4C4CC"
+                android:secondaryProgressTint="@color/grey"
                 android:splitTrack="false"
                 android:thumb="@drawable/ic_thumb" />
         </LinearLayout>
