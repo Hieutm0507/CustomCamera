@@ -24,5 +24,11 @@
     <string name="convert_into_text">Konwertuj na tekst</string>
     <string name="close">Zamknij</string>
     <string name="copy">Kopiuj</string>
-    <string name="image_saved">Image Saved</string>
+    <string name="image_saved">Obraz zapisany</string>
+    <string name="delete_confirm">Potwierdzić usunięcie?</string>
+    <string name="delete_description">Czy na pewno chcesz usunąć zdjęcie?\nTej operacji nie można cofnąć.</string>
+    <string name="cancel">Anuluj</string>
+    <string name="delete">Usuń</string>
+    <string name="select">Wybierz</string>
+    <string name="multi_delete_description">Czy na pewno chcesz usunąć te zdjęcia?\nTej operacji nie można cofnąć.</string>
 </resources>

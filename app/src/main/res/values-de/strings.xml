@@ -24,5 +24,11 @@
     <string name="convert_into_text">In Text umwandeln</string>
     <string name="close">Schließen</string>
     <string name="copy">Kopieren</string>
-    <string name="image_saved">Image Saved</string>
+    <string name="image_saved">Bild gespeichert</string>
+    <string name="delete_confirm">Löschen bestätigen?</string>
+    <string name="delete_description">Möchten Sie das Foto wirklich löschen?\nDiese Aktion kann nicht rückgängig gemacht werden.</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="delete">Löschen</string>
+    <string name="select">Auswählen</string>
+    <string name="multi_delete_description">Sind Sie sicher, dass Sie diese Fotos löschen möchten?\nDiese Aktion kann nicht rückgängig gemacht.</string>
 </resources>

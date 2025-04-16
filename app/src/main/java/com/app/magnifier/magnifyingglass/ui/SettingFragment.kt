@@ -1,6 +1,7 @@
 package com.app.magnifier.magnifyingglass.ui
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -32,6 +33,11 @@ class SettingFragment : Fragment() {
             ft.setCustomAnimations(0, R.anim.slide_out)
             ft.remove(this)
             ft.commit()
+        }
+
+        binding.clImageSaved.setOnClickListener {
+            val intent = Intent(requireContext(), GalleryActivity::class.java)
+            startActivity(intent)
         }
     }
 }

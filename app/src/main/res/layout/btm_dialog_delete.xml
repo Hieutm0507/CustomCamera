@@ -7,32 +7,32 @@
     android:background="@drawable/bg_fragment_permiss"
     android:padding="20dp">
 
-    <ImageView
-        android:id="@+id/iv_bar"
-        android:layout_width="60dp"
-        android:layout_height="8dp"
-        android:background="@drawable/bg_seekbar"
-        android:backgroundTint="@color/grey"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:importantForAccessibility="no"/>
-
     <TextView
-        android:id="@+id/tv_text_convert"
-        android:layout_width="0dp"
+        android:id="@+id/tv_camera_access"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_bar"
-        app:layout_constraintBottom_toTopOf="@id/ll_buttons"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="30dp"
-        android:text="The text converted is displayed here"
-        android:textSize="18sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tv_description"
+        android:layout_marginVertical="20dp"
+        android:text="@string/delete_confirm"
         android:textColor="@color/black"
-        android:textIsSelectable="true"
-        tools:ignore="HardcodedText" />
+        android:textSize="24sp"
+        android:textStyle="bold"/>
+    
+    <TextView
+        android:id="@+id/tv_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/ll_buttons"
+        app:layout_constraintEnd_toEndOf="@id/ll_buttons"
+        app:layout_constraintBottom_toTopOf="@id/ll_buttons"
+        android:layout_marginBottom="30dp"
+        android:text="@string/delete_description"
+        android:textSize="16sp"
+        android:textColor="#4A4A4A"
+        android:textAlignment="center"/>
 
     <LinearLayout
         android:id="@+id/ll_buttons"
@@ -42,7 +42,7 @@
         android:orientation="horizontal">
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/bt_close"
+            android:id="@+id/bt_cancel"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
@@ -50,21 +50,21 @@
             android:layout_marginEnd="20dp"
             android:background="@drawable/bg_seekbar"
             android:backgroundTint="#F2F2F3"
-            android:text="@string/close"
+            android:text="@string/cancel"
             android:textAllCaps="false"
             android:textColor="@color/black"
             android:textSize="20sp"
             android:stateListAnimator="@null"/>
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/bt_copy"
+            android:id="@+id/bt_delete"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:padding="15dp"
             android:background="@drawable/bg_seekbar"
             android:backgroundTint="@color/blue"
-            android:text="@string/copy"
+            android:text="@string/delete"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="20sp"

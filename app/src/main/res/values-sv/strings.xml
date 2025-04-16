@@ -24,5 +24,13 @@
     <string name="convert_into_text">Konvertera till text</string>
     <string name="close">Stäng</string>
     <string name="copy">Kopiera</string>
-    <string name="image_saved">Image Saved</string>
+    <string name="image_saved">Bild sparad</string>
+    <string name="delete_confirm">Bekräfta radering?</string>
+    <string name="delete_description">Är du säker på att du vill radera fotot?\nDenna åtgärd kan inte ångras.</string>
+    <string name="cancel">Avbryt</string>
+    <string name="delete">Radera</string>
+    <string name="select">Välj</string>
+    <string name="multi_delete_description">Är du säker på att du vill radera dessa foton?\nDenna åtgärd går inte att ångra.</string>
 </resources>
+
+<!-- SWEDISH -->

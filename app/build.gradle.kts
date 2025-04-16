@@ -41,8 +41,12 @@ android {
 }
 
 dependencies {
+    // GLIDE (to load url of an image to TextView)
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
+
     // Recognize Latin text
-    implementation ("com.google.mlkit:text-recognition:16.0.1")
+    implementation (libs.text.recognition)
 
     // AD
     implementation(libs.play.services.ads)

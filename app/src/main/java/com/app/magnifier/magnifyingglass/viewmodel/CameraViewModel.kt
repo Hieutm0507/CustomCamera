@@ -21,7 +21,6 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-
 import androidx.lifecycle.ViewModel
 import com.app.magnifier.magnifyingglass.utils.Constants
 import java.io.File
@@ -156,7 +155,7 @@ class CameraViewModel : ViewModel() {
      *         If Android 9 or earlier: Using Access API
      */
     @SuppressLint("WeekBasedYear")
-    fun savePicture(bitmap: Bitmap, context: Context) : Boolean {
+    fun savePicture(bitmap: Bitmap, context: Context) : String {
         val fileName = SimpleDateFormat(Constants.FILE_NAME_FORMAT, Locale.getDefault())
             .format(System.currentTimeMillis()) + ".jpg"
 
@@ -176,7 +175,7 @@ class CameraViewModel : ViewModel() {
 
             if (uri == null) {
                 Log.e(Constants.TAG, "Failed to create new MediaStore record.")
-                return false
+                return "null"
             }
 
             outputStream = contentResolver.openOutputStream(uri)
@@ -204,6 +203,32 @@ class CameraViewModel : ViewModel() {
             it.flush()
         }
 
-        return true
+        return fileName
+    }
+
+
+    //TODO: Delete picture
+    fun deletePicture(context: Context, fileName: String): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            // Android 10 trở lên
+            val contentResolver = context.contentResolver
+            val uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+            val selection = "${MediaStore.MediaColumns.DISPLAY_NAME} = ?"
+            val selectionArgs = arrayOf(fileName)
+
+            val rowsDeleted = contentResolver.delete(uri, selection, selectionArgs)
+            rowsDeleted > 0
+        } else {
+            // Android 9 và thấp hơn
+            val directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+            val subDir = File(directory, "Magnifier")
+            val file = File(subDir, fileName)
+
+            if (file.exists()) {
+                file.delete()
+            } else {
+                false
+            }
+        }
     }
 }

@@ -24,5 +24,11 @@
     <string name="convert_into_text">Convertir en texte</string>
     <string name="close">Fermer</string>
     <string name="copy">Copier</string>
-    <string name="image_saved">Image Saved</string>
+    <string name="image_saved">Image enregistrée</string>
+    <string name="delete_confirm">Confirmer la suppression?</string>
+    <string name="delete_description">Êtes-vous sûr de vouloir supprimer la photo?\nCette action est irréversible.</string>
+    <string name="cancel">Annuler</string>
+    <string name="delete">Supprimer</string>
+    <string name="select">Sélectionner</string>
+    <string name="multi_delete_description">Êtes-vous sûr de vouloir supprimer ces photos?\nCette action est irréversible.</string>
 </resources>

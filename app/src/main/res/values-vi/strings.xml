@@ -21,8 +21,14 @@
     <string name="instruct_cap">Dùng hai ngón tay để\nphóng to hoặc thu nhỏ hình ảnh.</string>
     <string name="permission_not_granted">Không được cấp phép</string>
     <string name="open">Mở</string>
-    <string name="convert_into_text">Chuyển san Văn bản</string>
+    <string name="convert_into_text">Chuyển sang Văn bản</string>
     <string name="close">Đóng</string>
     <string name="copy">Sao chép</string>
-    <string name="image_saved">Image Saved</string>
+    <string name="image_saved">Ảnh đã lưu</string>
+    <string name="delete_confirm">Xác nhận xóa?</string>
+    <string name="delete_description">Bạn có chắc chắn muốn xóa ảnh này?\nHành động này sẽ không thể khôi phục.</string>
+    <string name="cancel">Hủy</string>
+    <string name="delete">Xóa</string>
+    <string name="select">Chọn</string>
+    <string name="multi_delete_description">Bạn có chắc chắn muốn xóa những ảnh này?\nHành động này sẽ không thể khôi phục.</string>
 </resources>

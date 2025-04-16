@@ -24,5 +24,13 @@
     <string name="convert_into_text">Konverter til tekst</string>
     <string name="close">Luk</string>
     <string name="copy">Kopiér</string>
-    <string name="image_saved">Image Saved</string>
+    <string name="image_saved">Billedet er gemt</string>
+    <string name="delete_confirm">Bekræft sletning?</string>
+    <string name="delete_description">Er du sikker på, at du vil slette billedet?\nDenne handling kan ikke fortrydes.</string>
+    <string name="cancel">Annuller</string>
+    <string name="delete">Slet</string>
+    <string name="select">Vælg</string>
+    <string name="multi_delete_description">Er du sikker på, at du vil slette disse fotos?\nDenne handling kan ikke fortrydes.</string>
 </resources>
+
+<!-- DANISH -->

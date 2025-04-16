@@ -24,5 +24,11 @@
     <string name="convert_into_text">Преобразовать в текст</string>
     <string name="close">Закрыть</string>
     <string name="copy">Копировать</string>
-    <string name="image_saved">Image Saved</string>
+    <string name="image_saved">Изображение сохранено</string>
+    <string name="delete_confirm">Подтвердить удаление?</string>
+    <string name="delete_description">Вы уверены, что хотите удалить фото?\nЭто действие нельзя будет отменить.</string>
+    <string name="cancel">Отмена</string>
+    <string name="delete">Удалить</string>
+    <string name="select">Выбрать</string>
+    <string name="multi_delete_description">Вы уверены, что хотите удалить эти фотографии?\nЭто действие невозможно отменить.</string>
 </resources>

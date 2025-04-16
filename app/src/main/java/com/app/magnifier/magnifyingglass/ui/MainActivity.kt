@@ -57,7 +57,6 @@ class MainActivity : AppCompatActivity() {
     private var isPaused : Boolean = false
     private lateinit var sharedPreferences: SharedPreferences
     private var openCount : Int = 0
-    private var isFirstTime : Boolean = true
     private var isFirstCap : Boolean = true
     private lateinit var adLoader: AdLoader
 
@@ -117,29 +116,14 @@ class MainActivity : AppCompatActivity() {
 
         // TODO: ADs using Native
         CoroutineScope(Dispatchers.Main).launch {
-            MobileAds.initialize(this@MainActivity) {}
+            MobileAds.initialize(this@MainActivity)
         }
 
         loadNativeAd(this)
 
 
         // TODO: Splash Screen
-        Handler(Looper.getMainLooper()).postDelayed(
-            {
-                binding.clSplashScreen.visibility = View.GONE
-
-                if (allPermissionGranted()) {
-                    cameraViewModel.startCamera(this, binding.pvView, this as LifecycleOwner)
-                }
-                else {
-                    displayPermissionDialog()
-                }
-            },
-            Constants.LOADING_TIME)
-
-        val animator = ObjectAnimator.ofInt(binding.pbLoading, "progress", 0, 100)
-        animator.duration = Constants.LOADING_TIME
-        animator.start()
+        splashScreen()
         //-------------------------------
 
 
@@ -203,6 +187,26 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun splashScreen() {
+        Handler(Looper.getMainLooper()).postDelayed(
+            {
+                binding.clSplashScreen.visibility = View.GONE
+
+                if (allPermissionGranted()) {
+                    cameraViewModel.startCamera(this, binding.pvView, this as LifecycleOwner)
+                }
+                else {
+                    displayPermissionDialog()
+                }
+            },
+            Constants.LOADING_TIME)
+
+        val animator = ObjectAnimator.ofInt(binding.pbLoading, "progress", 0, 100)
+        animator.duration = Constants.LOADING_TIME
+        animator.start()
+    }
+
+    @SuppressLint("InflateParams")
     private fun loadNativeAd(context: Context) {
         adLoader = AdLoader.Builder(context, "ca-app-pub-3940256099942544/2247696110")
             .forNativeAd { ad : NativeAd ->
@@ -256,8 +260,6 @@ class MainActivity : AppCompatActivity() {
         val editor = sharedPreferences.edit()
         Log.d("TAG_P_SAVE", openCount.toString())
         editor.putInt("openCount", openCount)
-//        Log.d("TAG_P_SAVE", isFirstTime.toString())
-//        editor.putBoolean("isFirstTime", isFirstTime)
         Log.d("TAG_P_SAVE", isFirstCap.toString())
         editor.putBoolean("isFirstCap", isFirstCap)
         editor.apply()
@@ -266,8 +268,6 @@ class MainActivity : AppCompatActivity() {
     private fun callData() {
         sharedPreferences = this.getSharedPreferences(Constants.PREFERENCE, MODE_PRIVATE)
         openCount = sharedPreferences.getInt("openCount", 0)
-//        isFirstTime = sharedPreferences.getBoolean("isFirstTime", true)
-//        Log.d("TAG_P_CALL", isFirstTime.toString())
         isFirstCap = sharedPreferences.getBoolean("isFirstCap", true)
         Log.d("TAG_P_CALL", isFirstCap.toString())
     }
@@ -277,8 +277,6 @@ class MainActivity : AppCompatActivity() {
         ft.replace(R.id.fl_display_fragment, GuidelineFragment())
         ft.addToBackStack(null)
         ft.commit()
-
-//        isFirstTime = false
     }
 
     private fun goToCapInstruct() {
@@ -298,7 +296,7 @@ class MainActivity : AppCompatActivity() {
             binding.pvView.bitmap?.let { bitmap ->
                 val saveImg = cameraViewModel.savePicture(bitmap, this)
 
-                if (saveImg) {
+                if (saveImg.isEmpty()) {
                     showSuccessToast(this)
                 }
 
@@ -308,6 +306,7 @@ class MainActivity : AppCompatActivity() {
 
                 val bundle = Bundle()
                 bundle.putParcelable("bitmap", bitmap)
+                bundle.putString("fileName", saveImg)
                 fragment.arguments = bundle
                 ft.add(R.id.fl_display_fragment, fragment)
                 ft.addToBackStack(null)
