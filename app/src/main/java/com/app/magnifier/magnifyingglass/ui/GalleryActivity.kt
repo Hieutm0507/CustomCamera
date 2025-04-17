@@ -6,7 +6,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -18,6 +17,8 @@ import com.app.magnifier.magnifyingglass.R
 import com.app.magnifier.magnifyingglass.adapter.GalleryAdapter
 import com.app.magnifier.magnifyingglass.databinding.ActivityGalleryBinding
 import com.app.magnifier.magnifyingglass.model.GalleryItem
+import com.app.magnifier.magnifyingglass.model.ImageByDate
+import com.app.magnifier.magnifyingglass.viewmodel.CameraViewModel
 import com.app.magnifier.magnifyingglass.viewmodel.ImageViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -25,9 +26,11 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class GalleryActivity : AppCompatActivity() {
     private val imageViewModel : ImageViewModel by viewModel()
+    private val cameraViewModel : CameraViewModel by viewModel()
     private lateinit var binding : ActivityGalleryBinding
     private lateinit var adapter: GalleryAdapter
     private lateinit var imageItems: MutableList<GalleryItem>
+    private lateinit var imagesTaken : List<ImageByDate>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +43,7 @@ class GalleryActivity : AppCompatActivity() {
             finish()
         }
 
-        initAdapter(this)
+        initAdapter()
 
         binding.btSelect.setOnClickListener {
             binding.btSelect.visibility = View.GONE
@@ -48,6 +51,7 @@ class GalleryActivity : AppCompatActivity() {
             binding.ibDelete.visibility = View.VISIBLE
             binding.ivClose.visibility = View.VISIBLE
             adapter.toggleCheckbox(true)
+            binding.tvHeader.text = getString(R.string.selected_items, 0)
         }
 
         binding.ivClose.setOnClickListener {
@@ -56,19 +60,13 @@ class GalleryActivity : AppCompatActivity() {
             binding.cbSelectAll.visibility = View.GONE
             binding.ibDelete.visibility = View.GONE
             adapter.toggleCheckbox(false)
+            binding.tvHeader.text = getString(R.string.image_saved)
         }
-
-        binding.ibDelete.setOnClickListener {
-            displayDeleteDialog()
-        }
-
-        val list = adapter.getSelectedImages()
-        Log.d("TAG_LIST", list.toString())
     }
 
 
     @SuppressLint("InflateParams")
-    private fun displayDeleteDialog() {
+    private fun displayDeleteDialog(chosenList: List<String>) {
         val dialog = BottomSheetDialog(this, R.style.CenteredBottomSheetDialog)
         val view = layoutInflater.inflate(R.layout.btm_dialog_delete, null)
 
@@ -84,16 +82,18 @@ class GalleryActivity : AppCompatActivity() {
         btDelete.setOnClickListener {
             dialog.dismiss()
             binding.ivClose.performClick()
-//            cameraViewModel.deletePicture(requireContext(), fileName)
-//            deletePhoto()
+            for (item in chosenList) {
+                cameraViewModel.deletePicture(this, item)
+            }
+            reloadImages(this)
         }
 
         dialog.setContentView(view)
         dialog.show()
     }
 
-    private fun initAdapter(context: Context) {
-        var imagesTaken = imageViewModel.getCapturedImages(this)
+    private fun initAdapter() {
+        imagesTaken = imageViewModel.getCapturedImages(this)
         imageItems = imageViewModel.flattenImageByDateList(imagesTaken)
 
         adapter = GalleryAdapter(imageItems)
@@ -125,18 +125,30 @@ class GalleryActivity : AppCompatActivity() {
                 ft.addToBackStack(null)
                 ft.commit()
             }
+
+            override fun onChosenListChangeListener(chosenList: List<String>) {
+                binding.tvHeader.text = getString(R.string.selected_items, chosenList.size)
+
+                binding.ibDelete.setOnClickListener {
+                    displayDeleteDialog(chosenList)
+                }
+            }
         })
 
         supportFragmentManager.setFragmentResultListener("capture_result", this) { _, bundle ->
             val isDelete = bundle.getBoolean("success")
             if (isDelete) {
-                imagesTaken = imageViewModel.getCapturedImages(context)
-                val updatedImageItems = imageViewModel.flattenImageByDateList(imagesTaken)
-
-                // Update dữ liệu cho adapter
-                adapter.setData(updatedImageItems)
+                reloadImages(this)
             }
         }
+    }
+
+    private fun reloadImages(context: Context) {
+        imagesTaken = imageViewModel.getCapturedImages(context)
+        val updatedImageItems = imageViewModel.flattenImageByDateList(imagesTaken)
+
+        // Update dữ liệu cho adapter
+        adapter.setData(updatedImageItems)
     }
 
     fun getBitmapFromUri(context: Context, uri: Uri): Bitmap? {

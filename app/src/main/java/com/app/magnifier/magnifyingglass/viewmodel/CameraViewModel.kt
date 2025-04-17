@@ -36,7 +36,7 @@ class CameraViewModel : ViewModel() {
     private var cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
     private val _zoomState = MutableLiveData<ZoomState>()
     val zoomState: LiveData<ZoomState> get() = _zoomState
-    private val _flashState = MutableLiveData<Boolean>(false)
+    private val _flashState = MutableLiveData(false)
     val flashState: LiveData<Boolean> get() = _flashState
     private val _exposureIndex = MutableLiveData<Int>()
     val exposureIndex: LiveData<Int> get() = _exposureIndex
@@ -219,7 +219,7 @@ class CameraViewModel : ViewModel() {
             val rowsDeleted = contentResolver.delete(uri, selection, selectionArgs)
             rowsDeleted > 0
         } else {
-            // Android 9 và thấp hơn
+            // Android 9 và below
             val directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
             val subDir = File(directory, "Magnifier")
             val file = File(subDir, fileName)

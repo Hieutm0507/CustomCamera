@@ -30,4 +30,5 @@
     <string name="delete">Delete</string>
     <string name="select">Select</string>
     <string name="multi_delete_description">Are you sure you want to delete these photos?\nThis action cannot be undone.</string>
+    <string name="selected_items">%d selected</string>
 </resources>

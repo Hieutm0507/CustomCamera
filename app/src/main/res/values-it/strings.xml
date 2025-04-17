@@ -31,4 +31,5 @@
     <string name="delete">Elimina</string>
     <string name="select">Seleziona</string>
     <string name="multi_delete_description">Sei sicuro di voler eliminare queste foto?\nQuesta azione non può essere annullata.</string>
+    <string name="selected_items">%d selezionati</string>
 </resources>

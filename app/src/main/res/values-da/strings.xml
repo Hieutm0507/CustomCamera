@@ -31,6 +31,7 @@
     <string name="delete">Slet</string>
     <string name="select">Vælg</string>
     <string name="multi_delete_description">Er du sikker på, at du vil slette disse fotos?\nDenne handling kan ikke fortrydes.</string>
+    <string name="selected_items">%d valgt</string>
 </resources>
 
 <!-- DANISH -->

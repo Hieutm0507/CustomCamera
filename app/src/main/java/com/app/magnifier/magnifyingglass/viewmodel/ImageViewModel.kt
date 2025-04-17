@@ -4,6 +4,8 @@ import android.content.ContentUris
 import android.content.Context
 import android.net.Uri
 import android.provider.MediaStore
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.app.magnifier.magnifyingglass.model.GalleryItem
 import com.app.magnifier.magnifyingglass.model.ImageByDate
@@ -12,6 +14,10 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class ImageViewModel : ViewModel() {
+    private val _selectedList = MutableLiveData<List<String>>(emptyList())
+    val selectedList : LiveData<List<String>> = _selectedList
+
+
     fun flattenImageByDateList(data: List<ImageByDate>): MutableList<GalleryItem> {
         val result = mutableListOf<GalleryItem>()
         for (group in data) {

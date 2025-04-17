@@ -31,4 +31,5 @@
     <string name="delete">Usuń</string>
     <string name="select">Wybierz</string>
     <string name="multi_delete_description">Czy na pewno chcesz usunąć te zdjęcia?\nTej operacji nie można cofnąć.</string>
+    <string name="selected_items">Wybrano %d</string>
 </resources>

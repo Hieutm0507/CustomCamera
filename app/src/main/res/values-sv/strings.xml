@@ -31,6 +31,7 @@
     <string name="delete">Radera</string>
     <string name="select">Välj</string>
     <string name="multi_delete_description">Är du säker på att du vill radera dessa foton?\nDenna åtgärd går inte att ångra.</string>
+    <string name="selected_items">%d valda</string>
 </resources>
 
 <!-- SWEDISH -->

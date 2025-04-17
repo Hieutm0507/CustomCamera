@@ -22,10 +22,15 @@ class SettingFragment : Fragment() {
         return binding.root
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initUI()
+    }
+
+
+    @SuppressLint("SetTextI18n")
+    private fun initUI() {
         binding.tvAppVersion.text = getString(R.string.version) + ": " + Constants.APP_VERSION
 
         binding.ivBack.setOnClickListener {

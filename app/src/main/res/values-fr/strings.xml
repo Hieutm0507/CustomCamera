@@ -31,4 +31,5 @@
     <string name="delete">Supprimer</string>
     <string name="select">Sélectionner</string>
     <string name="multi_delete_description">Êtes-vous sûr de vouloir supprimer ces photos?\nCette action est irréversible.</string>
+    <string name="selected_items">%d sélectionnés</string>
 </resources>

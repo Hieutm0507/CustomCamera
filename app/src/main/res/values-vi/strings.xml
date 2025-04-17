@@ -31,4 +31,5 @@
     <string name="delete">Xóa</string>
     <string name="select">Chọn</string>
     <string name="multi_delete_description">Bạn có chắc chắn muốn xóa những ảnh này?\nHành động này sẽ không thể khôi phục.</string>
+    <string name="selected_items">Đã chọn %d</string>
 </resources>

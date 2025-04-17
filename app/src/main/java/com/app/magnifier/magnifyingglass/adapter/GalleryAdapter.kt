@@ -19,10 +19,6 @@ class GalleryAdapter(private var items: MutableList<GalleryItem>
     private var mListener: OnItemClickListener? = null
     private var showCheckbox = false
 
-    fun setOnClickListener(listener: OnItemClickListener) {
-        mListener = listener
-    }
-
     companion object {
         const val VIEW_TYPE_HEADER = 0
         private const val VIEW_TYPE_PHOTO = 1
@@ -65,6 +61,22 @@ class GalleryAdapter(private var items: MutableList<GalleryItem>
                 if(showCheckbox) View.VISIBLE
                 else View.GONE
         }
+
+//        private fun isAllImagesSelected(date: String): Boolean {
+//            return items.filterIsInstance<GalleryItem.ImageItem>()
+//                .filter { getDateFromUri(it.uri) == date } // Lọc ảnh theo ngày
+//                .all { it.isSelected }
+//        }
+//
+//        private fun toggleImagesSelection(date: String, isSelected: Boolean) {
+//            items.filterIsInstance<GalleryItem.ImageItem>()
+//                .filter { getDateFromUri(it.uri) == date }
+//                .forEach { it.isSelected = isSelected }
+//
+//            // Cập nhật lại danh sách ảnh đã chọn
+//            mListener?.onChosenListChangeListener(getSelectedImages())
+//            notifyDataSetChanged()
+//        }
     }
 
     inner class PhotoViewHolder(private val binding : ItemImageBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -77,6 +89,10 @@ class GalleryAdapter(private var items: MutableList<GalleryItem>
 
             binding.cbCheckBox.setOnCheckedChangeListener { _, isChecked ->
                 photo.isSelected = isChecked
+
+                mListener?.onChosenListChangeListener(
+                    chosenList = getSelectedImages(binding)
+                )
             }
         }
 
@@ -87,6 +103,10 @@ class GalleryAdapter(private var items: MutableList<GalleryItem>
                 mListener?.onItemClick(item.uri, fileName)
             }
         }
+    }
+
+    fun setOnClickListener(listener: OnItemClickListener) {
+        mListener = listener
     }
 
     fun toggleCheckbox(isShown : Boolean) {
@@ -108,10 +128,10 @@ class GalleryAdapter(private var items: MutableList<GalleryItem>
         return fileName
     }
 
-    fun getSelectedImages(): List<Uri> {
+    fun getSelectedImages(binding: ItemImageBinding): List<String> {
         return items.filterIsInstance<GalleryItem.ImageItem>()
             .filter { it.isSelected }
-            .map { it.uri }
+            .map { getFileNameFromUri(binding.root.context, it.uri) }
     }
 
     fun setData(imageItems: MutableList<GalleryItem>) {
@@ -119,7 +139,9 @@ class GalleryAdapter(private var items: MutableList<GalleryItem>
         notifyDataSetChanged()
     }
 
+
     interface OnItemClickListener {
         fun onItemClick(uri: Uri, fileName: String)
+        fun onChosenListChangeListener(chosenList : List<String>)
     }
 }
