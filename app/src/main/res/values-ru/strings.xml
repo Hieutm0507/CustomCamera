@@ -32,4 +32,13 @@
     <string name="select">Выбрать</string>
     <string name="multi_delete_description">Вы уверены, что хотите удалить эти фотографии?\nЭто действие невозможно отменить.</string>
     <string name="selected_items">Выбрано %d</string>
+    <string name="feedback">Обратная связь</string>
+    <string name="share_app">Поделиться приложением</string>
+    <string name="rate_app">Оценить приложение</string>
+    <string name="more_apps">Больше приложений</string>
+    <string name="submit">Submit</string>
+    <string name="your_feedback">Your Feedback</string>
+    <string name="feedback_hint">Typing your feedback</string>
+    <string name="rate_your_experience">Rate your experience</string>
+    <string name="send_review">Send Review</string>
 </resources>

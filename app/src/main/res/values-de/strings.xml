@@ -32,4 +32,13 @@
     <string name="select">Auswählen</string>
     <string name="multi_delete_description">Sind Sie sicher, dass Sie diese Fotos löschen möchten?\nDiese Aktion kann nicht rückgängig gemacht.</string>
     <string name="selected_items">%d ausgewählt</string>
+    <string name="feedback">Feedback</string>
+    <string name="share_app">App teilen</string>
+    <string name="rate_app">App bewerten</string>
+    <string name="more_apps">Weitere Apps</string>
+    <string name="submit">Submit</string>
+    <string name="your_feedback">Your Feedback</string>
+    <string name="feedback_hint">Typing your feedback</string>
+    <string name="rate_your_experience">Rate your experience</string>
+    <string name="send_review">Send Review</string>
 </resources>

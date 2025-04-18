@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/bg_fragment_permiss"
+    android:padding="20dp">
+
+    <ImageView
+        android:id="@+id/iv_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_rating_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tv_camera_access"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="30dp"
+        android:importantForAccessibility="no"/>
+
+    <TextView
+        android:id="@+id/tv_camera_access"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_icon"
+        app:layout_constraintBottom_toTopOf="@id/tv_description"
+        android:layout_marginBottom="10dp"
+        android:text="@string/rate_your_experience"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:textStyle="bold"/>
+    
+    <TextView
+        android:id="@+id/tv_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/rb_rating_bar"
+        android:layout_marginBottom="20dp"
+        android:text="@string/rate_description"
+        android:textSize="16sp"
+        android:textColor="#4A4A4A"
+        android:textAlignment="center"/>
+
+    <RatingBar
+        android:id="@+id/rb_rating_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/ll_buttons"
+        android:layout_marginBottom="30dp"
+        android:numStars="5"
+        android:stepSize="1.0"
+        android:rating="5"
+        android:isIndicator="false"
+        style="@style/Widget.AppCompat.RatingBar.Indicator"/>
+
+    <LinearLayout
+        android:id="@+id/ll_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/bt_cancel"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/bg_seekbar"
+            android:backgroundTint="#F2F2F3"
+            android:text="@string/cancel"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:stateListAnimator="@null"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/bt_send"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:background="@drawable/bg_seekbar"
+            android:backgroundTint="@color/blue"
+            android:text="@string/send_review"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:stateListAnimator="@null"/>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

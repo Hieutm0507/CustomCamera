@@ -32,6 +32,15 @@
     <string name="select">Välj</string>
     <string name="multi_delete_description">Är du säker på att du vill radera dessa foton?\nDenna åtgärd går inte att ångra.</string>
     <string name="selected_items">%d valda</string>
+    <string name="feedback">Feedback</string>
+    <string name="share_app">Dela appen</string>
+    <string name="rate_app">Betygsätt appen</string>
+    <string name="more_apps">Fler appar</string>
+    <string name="submit">Submit</string>
+    <string name="your_feedback">Your Feedback</string>
+    <string name="feedback_hint">Typing your feedback</string>
+    <string name="rate_your_experience">Rate your experience</string>
+    <string name="send_review">Send Review</string>
 </resources>
 
 <!-- SWEDISH -->

@@ -32,6 +32,15 @@
     <string name="select">Vælg</string>
     <string name="multi_delete_description">Er du sikker på, at du vil slette disse fotos?\nDenne handling kan ikke fortrydes.</string>
     <string name="selected_items">%d valgt</string>
+    <string name="feedback">Feedback</string>
+    <string name="share_app">Del app</string>
+    <string name="rate_app">Vurder app</string>
+    <string name="more_apps">Flere apps</string>
+    <string name="submit">Submit</string>
+    <string name="your_feedback">Your Feedback</string>
+    <string name="feedback_hint">Typing your feedback</string>
+    <string name="rate_your_experience">Rate your experience</string>
+    <string name="send_review">Send Review</string>
 </resources>
 
 <!-- DANISH -->

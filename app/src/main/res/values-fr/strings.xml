@@ -32,4 +32,13 @@
     <string name="select">Sélectionner</string>
     <string name="multi_delete_description">Êtes-vous sûr de vouloir supprimer ces photos?\nCette action est irréversible.</string>
     <string name="selected_items">%d sélectionnés</string>
+    <string name="feedback">Retour</string>
+    <string name="share_app">Partager l\’application</string>
+    <string name="rate_app">Noter l\’application</string>
+    <string name="more_apps">Plus d\’applications</string>
+    <string name="submit">Submit</string>
+    <string name="your_feedback">Your Feedback</string>
+    <string name="feedback_hint">Typing your feedback</string>
+    <string name="rate_your_experience">Rate your experience</string>
+    <string name="send_review">Send Review</string>
 </resources>
