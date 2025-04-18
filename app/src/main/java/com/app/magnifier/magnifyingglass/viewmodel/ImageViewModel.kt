@@ -2,10 +2,10 @@ package com.app.magnifier.magnifyingglass.viewmodel
 
 import android.content.ContentUris
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.MediaStore
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.app.magnifier.magnifyingglass.model.GalleryItem
 import com.app.magnifier.magnifyingglass.model.ImageByDate
@@ -14,15 +14,11 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class ImageViewModel : ViewModel() {
-    private val _selectedList = MutableLiveData<List<String>>(emptyList())
-    val selectedList : LiveData<List<String>> = _selectedList
-
-
     fun flattenImageByDateList(data: List<ImageByDate>): MutableList<GalleryItem> {
         val result = mutableListOf<GalleryItem>()
         for (group in data) {
             result.add(GalleryItem.DateHeader(group.date))
-            group.uris.forEach { result.add(GalleryItem.ImageItem(it)) }
+            group.uris.forEach { result.add(GalleryItem.ImageItem(it, group.date)) }
         }
         return result
     }
@@ -71,5 +67,17 @@ class ImageViewModel : ViewModel() {
                 val sortedUris = entry.value.reversed()         // Reverse to ensure newer upper
                 ImageByDate(entry.key, sortedUris)
             }
+    }
+
+    fun getBitmapFromUri(context: Context, uri: Uri): Bitmap? {
+        return try {
+            val inputStream = context.contentResolver.openInputStream(uri)
+            inputStream?.use {
+                BitmapFactory.decodeStream(it)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
     }
 }

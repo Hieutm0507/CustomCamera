@@ -2,8 +2,6 @@ package com.app.magnifier.magnifyingglass.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -39,11 +37,14 @@ class GalleryActivity : AppCompatActivity() {
         setContentView(binding.root)
         enableEdgeToEdge()
 
+        initAdapter()
+        setupUI()
+    }
+
+    private fun setupUI() {
         binding.ivBack.setOnClickListener {
             finish()
         }
-
-        initAdapter()
 
         binding.btSelect.setOnClickListener {
             binding.btSelect.visibility = View.GONE
@@ -60,6 +61,7 @@ class GalleryActivity : AppCompatActivity() {
             binding.cbSelectAll.visibility = View.GONE
             binding.ibDelete.visibility = View.GONE
             adapter.toggleCheckbox(false)
+            adapter.selectAllImages(this, false)
             binding.tvHeader.text = getString(R.string.image_saved)
         }
     }
@@ -112,7 +114,7 @@ class GalleryActivity : AppCompatActivity() {
 
         adapter.setOnClickListener(object : GalleryAdapter.OnItemClickListener {
             override fun onItemClick(uri: Uri, fileName: String) {
-                val bitmap = getBitmapFromUri(this@GalleryActivity, uri)
+                val bitmap = imageViewModel.getBitmapFromUri(this@GalleryActivity, uri)
                 // Display Image
                 val ft : FragmentTransaction = supportFragmentManager.beginTransaction()
                 val fragment = CaptureFragment()
@@ -133,6 +135,11 @@ class GalleryActivity : AppCompatActivity() {
                     displayDeleteDialog(chosenList)
                 }
             }
+
+            override fun onSelectAllStateChange(selectAllImg: Boolean) {
+                binding.cbSelectAll.setOnCheckedChangeListener(null)
+                binding.cbSelectAll.isChecked = selectAllImg
+            }
         })
 
         supportFragmentManager.setFragmentResultListener("capture_result", this) { _, bundle ->
@@ -140,6 +147,10 @@ class GalleryActivity : AppCompatActivity() {
             if (isDelete) {
                 reloadImages(this)
             }
+        }
+
+        binding.cbSelectAll.setOnCheckedChangeListener { _, selectAll ->
+            adapter.selectAllImages(this, selectAll)
         }
     }
 
@@ -149,17 +160,5 @@ class GalleryActivity : AppCompatActivity() {
 
         // Update dữ liệu cho adapter
         adapter.setData(updatedImageItems)
-    }
-
-    fun getBitmapFromUri(context: Context, uri: Uri): Bitmap? {
-        return try {
-            val inputStream = context.contentResolver.openInputStream(uri)
-            inputStream?.use {
-                BitmapFactory.decodeStream(it)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
     }
 }

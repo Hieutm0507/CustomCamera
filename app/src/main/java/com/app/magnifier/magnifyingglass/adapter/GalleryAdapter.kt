@@ -60,23 +60,27 @@ class GalleryAdapter(private var items: MutableList<GalleryItem>
             binding.cbCheckBox.visibility =
                 if(showCheckbox) View.VISIBLE
                 else View.GONE
-        }
 
-//        private fun isAllImagesSelected(date: String): Boolean {
-//            return items.filterIsInstance<GalleryItem.ImageItem>()
-//                .filter { getDateFromUri(it.uri) == date } // Lọc ảnh theo ngày
-//                .all { it.isSelected }
-//        }
-//
-//        private fun toggleImagesSelection(date: String, isSelected: Boolean) {
-//            items.filterIsInstance<GalleryItem.ImageItem>()
-//                .filter { getDateFromUri(it.uri) == date }
-//                .forEach { it.isSelected = isSelected }
-//
-//            // Cập nhật lại danh sách ảnh đã chọn
-//            mListener?.onChosenListChangeListener(getSelectedImages())
-//            notifyDataSetChanged()
-//        }
+            // cbCheckBox isChecked when all items are selected
+            val allImagesOfDate = items.filterIsInstance<GalleryItem.ImageItem>()
+                .filter { it.date == header.date }
+
+            binding.cbCheckBox.setOnCheckedChangeListener(null)
+            binding.cbCheckBox.isChecked = allImagesOfDate.all { it.isSelected }
+
+            binding.cbCheckBox.setOnCheckedChangeListener { _, isChecked ->
+                for (image in allImagesOfDate) {
+                    image.isSelected = isChecked
+                }
+                notifyDataSetChanged()
+
+                mListener?.onChosenListChangeListener(
+                    chosenList = getSelectedImages(binding.root.context)
+                )
+
+                mListener?.onSelectAllStateChange(isAllSelected())
+            }
+        }
     }
 
     inner class PhotoViewHolder(private val binding : ItemImageBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -85,13 +89,25 @@ class GalleryAdapter(private var items: MutableList<GalleryItem>
             binding.cbCheckBox.visibility =
                 if(showCheckbox) View.VISIBLE
                 else View.GONE
+            binding.cbCheckBox.setOnCheckedChangeListener(null)
             binding.cbCheckBox.isChecked = photo.isSelected
 
             binding.cbCheckBox.setOnCheckedChangeListener { _, isChecked ->
                 photo.isSelected = isChecked
 
+                // Deselect one image, deselect it's header
+                val headerPosition = findHeaderPosition(photo.date)
+                if (headerPosition != -1) {
+                    notifyItemChanged(headerPosition)
+                }
+
+                // Change state of Checkbox SelectAll
+                val selectAllImg = items.filterIsInstance<GalleryItem.ImageItem>()
+                    .all { it.isSelected }
+                mListener?.onSelectAllStateChange(isAllSelected())
+
                 mListener?.onChosenListChangeListener(
-                    chosenList = getSelectedImages(binding)
+                    chosenList = getSelectedImages(binding.root.context)
                 )
             }
         }
@@ -128,10 +144,10 @@ class GalleryAdapter(private var items: MutableList<GalleryItem>
         return fileName
     }
 
-    fun getSelectedImages(binding: ItemImageBinding): List<String> {
+    fun getSelectedImages(context: Context): List<String> {
         return items.filterIsInstance<GalleryItem.ImageItem>()
             .filter { it.isSelected }
-            .map { getFileNameFromUri(binding.root.context, it.uri) }
+            .map { getFileNameFromUri(context, it.uri) }
     }
 
     fun setData(imageItems: MutableList<GalleryItem>) {
@@ -139,9 +155,36 @@ class GalleryAdapter(private var items: MutableList<GalleryItem>
         notifyDataSetChanged()
     }
 
+    private fun findHeaderPosition(date: String): Int {
+        return items.indexOfFirst {
+            it is GalleryItem.DateHeader && it.date == date
+        }
+    }
+
+    fun selectAllImages(context: Context, isSelected: Boolean) {
+        items.filterIsInstance<GalleryItem.ImageItem>().forEach {
+            it.isSelected = isSelected
+        }
+
+        items.filterIsInstance<GalleryItem.DateHeader>().forEach {
+            it.isSelected = isSelected
+        }
+
+        // Update UI
+        notifyDataSetChanged()
+
+        mListener?.onChosenListChangeListener(getSelectedImages(context))
+    }
+
+    //
+    private fun isAllSelected(): Boolean {
+        return items.filterIsInstance<GalleryItem.ImageItem>().all { it.isSelected }
+    }
+
 
     interface OnItemClickListener {
         fun onItemClick(uri: Uri, fileName: String)
         fun onChosenListChangeListener(chosenList : List<String>)
+        fun onSelectAllStateChange(selectAllImg : Boolean)
     }
 }
